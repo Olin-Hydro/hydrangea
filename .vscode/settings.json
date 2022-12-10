@@ -1,4 +1,8 @@
 {
     "python.linting.flake8Enabled": true,
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#14b197",
+        "statusBar.background": "#333"
+      }
 }

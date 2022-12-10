@@ -1,14 +1,18 @@
+import os
 import sys
 from typing import List
-from fastapi import APIRouter, status, Body
-from fastapi.encoders import jsonable_encoder
+
 from dotenv import load_dotenv
+from fastapi import APIRouter, Body, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from server.database import db
-from server.models.config import ConfigModel
 
-sys.path.append("../../server")
+parent = os.path.abspath(".")
+sys.path.append(parent)
 
+
+from OldApp.server.database import db
+from OldApp.server.models.config import ConfigModel
 
 load_dotenv()
 

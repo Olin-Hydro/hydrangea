@@ -1,3 +1,5 @@
+import os
+import sys
 from datetime import datetime
 from typing import List
 
@@ -5,8 +7,11 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
-from .id import PyObjectId
-from .schedules import RAS, SAS, SS
+parent = os.path.abspath(".")
+sys.path.append(parent)
+
+from OldApp.server.models.id import PyObjectId
+from OldApp.server.models.schedules import RAS, SAS, SS
 
 load_dotenv()
 

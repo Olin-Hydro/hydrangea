@@ -1,20 +1,24 @@
+import os
+import sys
 from datetime import datetime
-from typing import Optional, Union
+from typing import Union
+
+parent = os.path.abspath(".")
+sys.path.append(parent)
 
 from bson import ObjectId
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, root_validator
 
+from OldApp.server.models.id import PyObjectId
+
 load_dotenv()
 
 
-from .id import PyObjectId
-
-
-class ReactiveActuatorModel(BaseModel):
+class ScheduledActuatorModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     name: str = Field(...)
-    sensor_id: Union[PyObjectId, None] = Field(default=None, alias="sensor_id")
+    garden_id: Union[PyObjectId, None] = Field(default=None, alias="garden_id")
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
 
@@ -24,9 +28,7 @@ class ReactiveActuatorModel(BaseModel):
         validate_assignment = True
         json_encoders = {ObjectId: str}
         schema_extra = {
-            "example": {"name": "Nutrient pump",
-                        "sensor_id": "6359d55bff77b777dd5c92e8"
-                        }
+            "example": {"name": "Water pump", "garden_id": "6359d55bff77b777dd5c92e8"}
         }
 
         @root_validator

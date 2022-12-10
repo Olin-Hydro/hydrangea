@@ -1,16 +1,20 @@
+import os
 import sys
-
-from fastapi import APIRouter, Body, HTTPException, status
-from fastapi.encoders import jsonable_encoder
-
-
-from dotenv import load_dotenv
-from fastapi.responses import JSONResponse, Response
-from server.models.sensor import SensorModel, UpdateSensorModel
-from server.database import db
 from typing import List
 
-sys.path.append("../../server")
+from dotenv import load_dotenv
+from fastapi import APIRouter, Body, HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
+parent = os.path.abspath(".")
+sys.path.append(parent)
+
+from App.server.database import db
+from App.server.models.sensor import SensorModel, UpdateSensorModel
+
+# print(sys.path)
+
 load_dotenv()
 
 
@@ -58,15 +62,5 @@ async def update_sensor(id: str, sensor: UpdateSensorModel = Body(...)):
 
     if (existing_sensor := await db["sensors"].find_one({"_id": id})) is not None:
         return existing_sensor
-
-    raise HTTPException(status_code=404, detail=f"Sensor {id} not found")
-
-
-@router.delete("/{id}", response_description="Delete a sensor")
-async def delete_sensor(id: str):
-    delete_result = await db["sensors"].delete_one({"_id": id})
-
-    if delete_result.deleted_count == 1:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     raise HTTPException(status_code=404, detail=f"Sensor {id} not found")

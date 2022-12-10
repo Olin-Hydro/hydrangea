@@ -7,3 +7,9 @@ python-dotenv==0.21.0
 flake8==5.0.4
 black==22.10.0
 pre-commit==2.20.0
+requests
+pytest==7.2.0
+beanie==1.11.6
+asgi_lifespan==1.0.1
+# To mock database
+pytest-docker[docker-compose-v1]

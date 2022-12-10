@@ -1,4 +1,6 @@
+import os
 import sys
+<<<<<<< HEAD:app/server/routes/garden.py
 from dotenv import load_dotenv
 from fastapi import APIRouter, Body, status, HTTPException, Depends, FastAPI
 from fastapi.encoders import jsonable_encoder
@@ -8,9 +10,19 @@ from fastapi.responses import JSONResponse, Response
 from server.models.garden import GardenModel, UpdateGardenModel
 from server.database import db
 from server.models.user import User, UserInDB
+=======
+from typing import List
+>>>>>>> 2218764bb74fa1b6ca9168623c52da16ab520314:OldApp/server/routes/garden.py
 
-sys.path.append("../../server")
+from dotenv import load_dotenv
+from fastapi import APIRouter, Body, HTTPException, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
+parent = os.path.abspath(".")
+sys.path.append(parent)
+from OldApp.server.database import db
+from OldApp.server.models.garden import GardenModel, UpdateGardenModel
 
 load_dotenv()
 
@@ -127,15 +139,5 @@ async def update_garden(id: str, garden: UpdateGardenModel = Body(...)):
 
     if (existing_garden := await db["gardens"].find_one({"_id": id})) is not None:
         return existing_garden
-
-    raise HTTPException(status_code=404, detail=f"Garden {id} not found")
-
-
-@router.delete("/{id}", response_description="Delete a garden")
-async def delete_garden(id: str):
-    delete_result = await db["gardens"].delete_one({"_id": id})
-
-    if delete_result.deleted_count == 1:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     raise HTTPException(status_code=404, detail=f"Garden {id} not found")
