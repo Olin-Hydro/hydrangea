@@ -1,13 +1,13 @@
 branch-defaults:
   main:
-    environment: hydrangea-dev
+    environment: Hydroapi-env-2
     group_suffix: null
 global:
-  application_name: hydrangea
+  application_name: hydro-api
   branch: null
   default_ec2_keyname: aws-eb
   default_platform: Docker running on 64bit Amazon Linux 2
-  default_region: us-west-2
+  default_region: us-east-1
   include_git_submodules: true
   instance_profile: null
   platform_name: null
