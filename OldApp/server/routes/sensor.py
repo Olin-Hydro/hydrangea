@@ -10,8 +10,8 @@ from fastapi.responses import JSONResponse
 parent = os.path.abspath(".")
 sys.path.append(parent)
 
-from App.server.database import db
-from App.server.models.sensor import SensorModel, UpdateSensorModel
+from OldApp.server.database import db
+from OldApp.server.models.sensor import SensorModel, UpdateSensorModel
 
 # print(sys.path)
 

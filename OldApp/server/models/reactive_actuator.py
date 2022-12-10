@@ -9,7 +9,7 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field, root_validator
 
-from App.server.models.id import PyObjectId
+from OldApp.server.models.id import PyObjectId
 
 load_dotenv()
 
