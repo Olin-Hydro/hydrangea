@@ -17,11 +17,7 @@ jobs:
         lfs: 'true'
     - 
       name: Build the Docker image
-      run: docker build \
-        --build-arg "DB_NAME=${{ secrets.DB_NAME }}" \
-        --build-arg "ATLAS_URI=${{ secrets.ATLAS_URI }}" \ 
-        --build-arg "PORT=${{ secrets.PORT }} \
-        -t tzou2024/hydroapi -f Dockerfile .
+      run: docker build --build-arg "DB_NAME=${{ secrets.DB_NAME }}"  --build-arg "ATLAS_URI=${{ secrets.ATLAS_URI }}"  --build-arg "PORT=${{ secrets.PORT }}  -t tzou2024/hydroapi -f Dockerfile .
     -
       name: Generate Deployment Package
       run: zip -r deploy.zip *
