@@ -19,7 +19,7 @@ jobs:
         password: ${{secrets.DOCKERHUB_TOKEN}}
         logout: true
     - name: Build Server image
-      run: docker build --build-arg "DB_NAME=8000"  --build-arg "ATLAS_URI=mongodb+srv://tzou2024:pswd@cluster0.ivgfrft.mongodb.net/?retryWrites=true&w=majority"  --build-arg "PORT=8000" -t tzou2024/hydroapi -f Dockerfile .
+      run: docker build --build-arg "DB_NAME={{ secrets.DB_NAME }}"  --build-arg "ATLAS_URI={{ secrets.ATLAS_URI }}"  --build-arg "PORT={{ secrets.PORT }}" -t tzou2024/hydroapi -f Dockerfile .
     - name: Tag our Image
       run: docker tag tzou2024/hydroapi tzou2024/hydroapi:latest
     - name: Push to dockerhub
