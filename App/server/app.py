@@ -26,6 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.on_event("startup")
 def startup_db_client():
     app.mongodb_client = MongoClient(ATLAS_URI)
