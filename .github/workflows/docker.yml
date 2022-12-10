@@ -17,7 +17,7 @@ jobs:
         lfs: 'true'
     - 
       name: Build the Docker image
-      run: docker-compose build --build-arg "DB_NAME=8000"  --build-arg "ATLAS_URI=mongodb+srv://tzou2024:pswd@cluster0.ivgfrft.mongodb.net/?retryWrites=true&w=majority"  --build-arg "PORT=8000" 
+      run: docker build --build-arg "DB_NAME=8000"  --build-arg "ATLAS_URI=mongodb+srv://tzou2024:pswd@cluster0.ivgfrft.mongodb.net/?retryWrites=true&w=majority"  --build-arg "PORT=8000" -t tzou2024/hydroapi -f Dockerfile .
     -
       name: Generate Deployment Package
       run: zip -r deploy.zip *
