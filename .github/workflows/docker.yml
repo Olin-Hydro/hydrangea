@@ -6,18 +6,22 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
- build_docker_images:
-  name: build docker images
-  runs-on: [ubuntu-latest]
-  steps:
-   - name: checkout
-     uses: actions/checkout@v2
-   - name: Docker Login
-     uses: docker/login-action@v1.8.0
-     with:
-      username: ${{secrets.DOCKERHUB_USERNAME}}
-      password: ${{secrets.DOCKERHUB_TOKEN}}
-      logout: true
+  build_docker_images:
+    name: build docker images
+    runs-on: [ubuntu-latest]
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Docker Login
+      uses: docker/login-action@v1.8.0
+      with:
+        username: ${{secrets.DOCKERHUB_USERNAME}}
+        password: ${{secrets.DOCKERHUB_TOKEN}}
+        logout: true
+    - name: Build Server image
+      run: docker build --build-arg "DB_NAME=8000"  --build-arg "ATLAS_URI=mongodb+srv://tzou2024:pswd@cluster0.ivgfrft.mongodb.net/?retryWrites=true&w=majority"  --build-arg "PORT=8000" -t tzou2024/hydroapi -f Dockerfile .
+    
+    
 
 # jobs:
 
