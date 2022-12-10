@@ -2,6 +2,7 @@ import os
 
 # from dotenv import dotenv_values
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from server.routes.garden import router as garden_router
 
@@ -17,6 +18,13 @@ DB_NAME = os.environ["DB_NAME"]
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def startup_db_client():
