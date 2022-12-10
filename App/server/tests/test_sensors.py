@@ -24,11 +24,11 @@ app = FastAPI()
 app.include_router(sensor_router, tags=["sensor"], prefix="/sensor")
 app.include_router(garden_router, tags=["garden"], prefix="/garden")
 
+
 @app.on_event("startup")
 async def startup_event():
     app.mongodb_client = MongoClient(os.environ["ATLAS_URI"])
     app.database = app.mongodb_client[os.environ["DB_NAME"] + "test"]
-
 
 
 @app.on_event("shutdown")
@@ -39,14 +39,21 @@ async def shutdown_event():
 
 def test_create_sensor():
     with TestClient(app) as client:
-        test_garden = client.post(
-            "/garden/", 
-            json={"id": "066de609-b04a-4b30-b46c-32537c7f1f6e", 
-                "name": "Don Quixote", 
-                "location": "Miguel de Cervantes"})
+        client.post(
+            "/garden/",
+            json={
+                "id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+            },
+        )
 
         response = client.post(
-            "/sensor/", json={"name": "Humidity", "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+            },
         )
 
         print(response.status_code)
@@ -58,10 +65,11 @@ def test_create_sensor():
         assert "_id" in body
 
 
-
 def test_create_sensor_missing_name():
     with TestClient(app) as client:
-        response = client.post("/sensor/", json={"garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"})
+        response = client.post(
+            "/sensor/", json={"garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+        )
         assert response.status_code == 422
 
 
@@ -70,16 +78,21 @@ def test_create_sensor_missing_garden_id():
         response = client.post("/sensor/", json={"name": "Humidity"})
         assert response.status_code == 422
 
-# def test_create_sensor_unexisting_garden_id():
-#     with TestClient(app) as client:
-#         new_sensor = client.post("/sensor/", json={"name": "Humidity", "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"})
-#         response = client.get("/garden/" + new_sensor.get("garden_id"))
-#         assert response.status_code == 404
+
+def test_create_sensor_unexisting_garden_id():
+    with TestClient(app) as client:
+        response = client.post("/sensor/", json={"name": "Humidity", "garden_id": "602d755d-a4dc-4bf7-bb1e-4e244b1f9b10"})
+        assert response.status_code == 404
+
 
 def test_get_sensor():
     with TestClient(app) as client:
         new_sensor = client.post(
-            "/sensor/", json={"name": "Humidity", "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+            },
         ).json()
         get_sensor_response = client.get("/sensor/" + new_sensor.get("_id"))
         assert get_sensor_response.status_code == 200
@@ -95,7 +108,11 @@ def test_get_sensor_unexisting():
 def test_update_sensor():
     with TestClient(app) as client:
         new_sensor = client.post(
-            "/sensor/", json={"name": "Humidity", "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+            },
         ).json()
 
         response = client.put(
@@ -116,7 +133,11 @@ def test_update_sensor_unexisting():
 def test_delete_sensor():
     with TestClient(app) as client:
         new_sensor = client.post(
-            "/sensor/", json={"name": "Humidity", "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+            },
         ).json()
 
         delete_sensor_response = client.delete("/sensor/" + new_sensor.get("_id"))
