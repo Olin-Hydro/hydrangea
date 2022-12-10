@@ -48,6 +48,7 @@ jobs:
         application_name: hydro-api
         environment_name: hydroapi-env
         version_label: "hydro-api-${{ steps.format-time.outputs.replaced }}"
+        region: us-east-1
     
     
 
