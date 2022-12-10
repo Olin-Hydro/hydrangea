@@ -81,7 +81,13 @@ def test_create_sensor_missing_garden_id():
 
 def test_create_sensor_unexisting_garden_id():
     with TestClient(app) as client:
-        response = client.post("/sensor/", json={"name": "Humidity", "garden_id": "602d755d-a4dc-4bf7-bb1e-4e244b1f9b10"})
+        response = client.post(
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": "602d755d-a4dc-4bf7-bb1e-4e244b1f9b10",
+            },
+        )
         assert response.status_code == 404
 
 
