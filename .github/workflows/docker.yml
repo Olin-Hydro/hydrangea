@@ -26,30 +26,28 @@ jobs:
       run: docker push tzou2024/hydroapi
 
 
-    - name: Get timestamp
-        uses: gerred/actions/current-time@master
-        id: current-time
-    
+    -
+      name: Get timestamp
+      uses: gerred/actions/current-time@master
+      id: current-time
+        
     - name: Run string replace
-        uses: frabert/replace-string-action@master
-        id: format-time
-        with:
-          pattern: '[:\.]+'
-          string: "${{ steps.current-time.outputs.time }}"
-          replace-with: '-'
-          flags: 'g'
+      uses: frabert/replace-string-action@master
+      id: format-time
+      with:
+        pattern: '[:\.]+'
+        string: "${{ steps.current-time.outputs.time }}"
+        replace-with: '-'
+        flags: 'g'
 
-    
     - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v14
-        with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-        aws_secret_key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+      uses: einaregilsson/beanstalk-deploy@v14
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: hydro-api
         environment_name: hydroapi-env
         version_label: "hydro-api-${{ steps.format-time.outputs.replaced }}"
-        region: us-east-1
-
     
     
 
