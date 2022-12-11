@@ -28,5 +28,7 @@ RUN printenv
 
 EXPOSE 8000
 
+EXPOSE 80
+
 CMD ["python3", "main.py"]
 
