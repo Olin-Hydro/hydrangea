@@ -39,3 +39,8 @@ def shutdown_db_client():
 
 
 app.include_router(garden_router, tags=["gardens"], prefix="/garden")
+
+
+@app.get("/", tags=["Root"])
+async def read_root():
+    return {"message": "Welcome to the 2022-23 Hydro API!"}
