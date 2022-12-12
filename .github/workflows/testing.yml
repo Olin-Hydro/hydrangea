@@ -1,5 +1,8 @@
 name: pytest
-
+#This Github Action sets up the repo in
+#An evnironemtn with a Python interpreter
+#And runs pytest to make sure all pushed code
+#Passes the current testing suite
 on:
   push:
     branches: [ main ]

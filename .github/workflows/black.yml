@@ -1,4 +1,7 @@
 name: black-action
+#This action runs the black formatter to
+#check/format our python3 code on push
+#and pull request.
 on: [push, pull_request]
 jobs:
   linter_name:
