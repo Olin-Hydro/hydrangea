@@ -4,24 +4,26 @@
 
 <hr> 
 
-### Setup
-
+### Running Locally with MongoDB Atlas URI
 To setup, make sure you have python and pip installed.
 
 Instantiate a [virtual environment](https://docs.python.org/3/library/venv.html) named venv if the venv folder does not exist. Make sure you activate it.
 
 Download [Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/) and optionally mongosh.
 
-To run natively, you need 3 environmental variables:
+To run locally, you need 3 environmental variables:
 
 ```
 DB_NAME=pymongo_tutorial
-ATLAS_URI=mongodb://localhost:27017/test
+ATLAS_URI=<cluster url>
 PORT=8000
 ```
 
-These will run the API with a local database. To run database online, setup a [MongoDB Atlas URI connection string](https://www.mongodb.com/docs/atlas/getting-started/)
+You can store these in a `.env` file in the hydrangea home directory. After following the next steps, you will have a cluster url. 
 
+These will run the API with a local database. To run database online, setup a [MongoDB Atlas URI connection string.](https://www.mongodb.com/docs/atlas/getting-started/) Follow through the steps under Atlas UI (or Atlas CLI). After you create a cluster, you will set your `ATLAS_URI` to your cluster url. 
+
+### Getting Started
 Download all required python packages using `pip install -r requirements.txt`
 
 To use our linting and autoformatting, install the pre-commit packages using `pre-commit install`
