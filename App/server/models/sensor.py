@@ -3,7 +3,6 @@ import sys
 import uuid
 from datetime import datetime
 from typing import Optional
-
 from pydantic import BaseModel, Field, root_validator
 
 parent = os.path.abspath(".")
@@ -15,7 +14,7 @@ sys.path.append(parent)
 class Sensor(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     name: str = Field(...)
-    garden_id: uuid.uuid4 = Field(...)
+    garden_id: str = Field(...)
     created_at: datetime = datetime.utcnow()
     updated_at: datetime = datetime.utcnow()
 
@@ -36,7 +35,7 @@ class Sensor(BaseModel):
 
 class SensorUpdate(BaseModel):
     name: Optional[str]
-    garden_id: Optional[uuid.uuid4]
+    garden_id: Optional[str]
 
     class Config:
         schema_extra = {
