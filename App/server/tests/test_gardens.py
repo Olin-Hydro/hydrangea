@@ -34,6 +34,7 @@ def test_create_garden():
         assert response.status_code == 201
 
         body = response.json()
+        print(body)
         assert body.get("name") == "Don Quixote"
         assert body.get("location") == "Miguel de Cervantes"
         assert "_id" in body
