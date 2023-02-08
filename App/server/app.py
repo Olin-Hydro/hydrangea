@@ -5,7 +5,9 @@ from pymongo import MongoClient
 from server.routes.garden import router as garden_router
 from server.routes.sensor import router as sensor_router
 from server.routes.scheduled_actuator import router as scheduled_actuator_router
+from dotenv import load_dotenv
 
+load_dotenv()
 
 ATLAS_URI = os.environ["ATLAS_URI"]
 DB_NAME = os.environ["DB_NAME"]
