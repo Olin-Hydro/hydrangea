@@ -4,9 +4,6 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, root_validator
 
-# from App.server.models.garden import Garden
-# gar_id = Garden().id()
-
 
 class Scheduled_Actuator(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")

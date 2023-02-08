@@ -1,20 +1,13 @@
 import os
 
-# from dotenv import dotenv_values
 from fastapi import FastAPI
 from pymongo import MongoClient
 from server.routes.garden import router as garden_router
 from server.routes.scheduled_actuator import router as scheduled_actuator_router
 
-# import sys
-
-
-# parent = os.path.abspath(".")
-# sys.path.append(parent)
 
 ATLAS_URI = os.environ["ATLAS_URI"]
 DB_NAME = os.environ["DB_NAME"]
-# config = dotenv_values(".env")
 
 app = FastAPI()
 

@@ -1,25 +1,15 @@
 import os
 import sys
 
-sys.path.append("../server")
-
-# sys.path.append('..')
-
-# from dotenv import dotenv_values
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-
-
-print(sys.path)
+sys.path.append("../server")
 
 from App.server.routes.scheduled_actuator import router as sa_router
 
 app = FastAPI()
-# config = dotenv_values(".env")
 app.include_router(sa_router, tags=["scheduled_actuators"], prefix="/sa")
 
 
