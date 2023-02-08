@@ -1,14 +1,7 @@
-import os
-import sys
 import uuid
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, root_validator
-
-parent = os.path.abspath(".")
-sys.path.append(parent)
-
-# from App.server.models.garden import Garden
 
 
 class Sensor(BaseModel):

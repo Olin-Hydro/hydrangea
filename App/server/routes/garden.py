@@ -1,26 +1,14 @@
-import os
-
-# import pprint
 import sys
 from typing import List
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-# sys.path.append("../server")
-print(sys.path)
 from fastapi import APIRouter, Body, HTTPException, Request, Response, status
 from fastapi.encoders import jsonable_encoder
-
-# from App.server.models.tete import fefe
-
-# print("fefe is" + str(fefe))
 
 try:
     from App.server.models.garden import Garden, GardenUpdate
 except ModuleNotFoundError:
     sys.path.append("../server")
     from server.models.garden import Garden, GardenUpdate
-# import pymongo
 
 
 router = APIRouter()
@@ -45,11 +33,7 @@ def create_garden(request: Request, garden: Garden = Body(...)):
 @router.get("/", response_description="List gardens", response_model=List[Garden])
 def list_gardens(request: Request, limit: int = 1000):
     gardens = list(request.app.database["gardens"].find())
-    # gardens = gardens[::-1]
     gardens.sort(key=lambda r: r["updated_at"], reverse=True)
-    # gardens = gardens[::-1]
-    # print(isinstance(gardens, list))
-    # pprint.pprint(gardens)
     return gardens[:limit]
 
 

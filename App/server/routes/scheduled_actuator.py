@@ -1,10 +1,7 @@
 import sys
 from typing import List
 
-
 from fastapi import APIRouter, Body, HTTPException, Request, status
-
-# delete import of Response ^^^
 from fastapi.encoders import jsonable_encoder
 
 try:
@@ -61,9 +58,6 @@ def find_scheduled_actuator(id: str, request: Request):
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"Scheduled Actuator with ID {id} not found",
     )
-
-
-# http put operation - https://fastapi.tiangolo.com/tutorial/body-updates/?h=put#update-replacing-with-put
 
 
 @router.put("/{id}", response_description="Update a scheduled actuator")
