@@ -2,14 +2,18 @@
 
 ## Setup instructions and Planning Docs
 
-<hr> 
+<hr>
 
 ### Running Locally with MongoDB Atlas URI
+
 To setup, make sure you have python and pip installed.
 
-Instantiate a [virtual environment](https://docs.python.org/3/library/venv.html) named venv if the venv folder does not exist. Make sure you activate it.
+Instantiate a [virtual environment](https://docs.python.org/3/library/venv.html)
+named venv if the venv folder does not exist. Make sure you activate it.
 
-Download [Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/) and optionally mongosh.
+Download
+[Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/)
+and optionally mongosh.
 
 To run locally, you need 3 environmental variables:
 
@@ -19,16 +23,23 @@ ATLAS_URI=<cluster url>
 PORT=8000
 ```
 
-You can store these in a `.env` file in the hydrangea home directory. After following the next steps, you will have a cluster url. 
+You can store these in a `.env` file in the hydrangea home directory. After
+following the next steps, you will have a cluster url.
 
-These will run the API with a local database. To run database online, setup a [MongoDB Atlas URI connection string.](https://www.mongodb.com/docs/atlas/getting-started/) Follow through the steps under Atlas UI (or Atlas CLI). After you create a cluster, you will set your `ATLAS_URI` to your cluster url. 
+These will run the API with a local database. To run database online, setup a
+[MongoDB Atlas URI connection string.](https://www.mongodb.com/docs/atlas/getting-started/)
+Follow through the steps under Atlas UI (or Atlas CLI). After you create a
+cluster, you will set your `ATLAS_URI` to your cluster url.
 
 ### Getting Started
+
 Download all required python packages using `pip install -r requirements.txt`
 
-To use our linting and autoformatting, install the pre-commit packages using `pre-commit install`
+To use our linting and autoformatting, install the pre-commit packages using
+`pre-commit install`
 
-Run linting and commit tests using `pre-commit run --all-files` at any time. They should run automatically on commit.
+Run linting and commit tests using `pre-commit run --all-files` at any time.
+They should run automatically on commit.
 
 To Run API from root directory, run
 
@@ -36,7 +47,7 @@ To Run API from root directory, run
 python3 App/main.py
 ```
 
-To run unit tests: 
+To run unit tests:
 
 ```
 python3 -m pytest
@@ -44,7 +55,8 @@ python3 -m pytest
 
 # Schema
 
-These are the final schema layed out for the api to organize the various sensors and actuators, as well as recording actions and readings.
+These are the final schema layed out for the api to organize the various sensors
+and actuators, as well as recording actions and readings.
 
 ### Sensor
 
@@ -83,9 +95,20 @@ These are the final schema layed out for the api to organize the various sensors
 | location   | `String`             |
 | created_at | `Datetime`           |
 
+# Commands
+
+| Name       | Type          |
+| ---------- | ------------- |
+| id         | `Foreign Key` |
+| cmd        | `Int`         |
+| type       | `String`      |
+| garden_id  | `Foreign Key` |
+| created_at | `Datetime`    |
+
 # Logging
 
-We will also keep track of the actions that actually took place and readings taken from sensors.
+We will also keep track of the actions that actually took place and readings
+taken from sensors.
 
 ### Readings
 
@@ -116,7 +139,8 @@ We will also keep track of the actions that actually took place and readings tak
 
 # Config
 
-The Configurations Table will be used in conjunction with logging data in [Mother Nature](https://github.com/Olin-Hydro/mother-nature)
+The Configurations Table will be used in conjunction with logging data in
+[Mother Nature](https://github.com/Olin-Hydro/mother-nature)
 
 ### Operational Config
 
@@ -225,14 +249,24 @@ Example:
 
 <hr />
 
+### Commands
+
+| Verb | URI Pattern  | Controller Action   |
+| ---- | ------------ | ------------------- |
+| GET  | `/cmd/`      | `view all commands` |
+| GET  | `/cmd/:raId` | `view a command`    |
+| POST | `/cmd/`      | `add`               |
+
+<hr />
+
 ### Gardens
 
-| Verb  | URI Pattern          | Controller Action                     |
-| ----- | -------------------- | ------------------------------------- |
-| GET   | `/gardens/`          | `view all gardens`                    |
+| Verb  | URI Pattern          | Controller Action        |
+| ----- | -------------------- | ------------------------ |
+| GET   | `/gardens/`          | `view all gardens`       |
 | GET   | `/gardens/:gardenId` | `view a specific garden` |
-| POST  | `/gardens/`          | `add`                                 |
-| PATCH | `/gardens/:gardenId` | `update`                              |
+| POST  | `/gardens/`          | `add`                    |
+| PATCH | `/gardens/:gardenId` | `update`                 |
 
 <hr />
 
@@ -263,4 +297,6 @@ Example:
 | POST | `/sa/logging/actions/`          | limit: int,start: ISO8601,end: ISO8601 | `add actions`                                                                    |
 
 ## Unit Testing
-If you want to contribute, make sure to test all of your schema/routes in App/server/tests before submitting a PR.
+
+If you want to contribute, make sure to test all of your schema/routes in
+App/server/tests before submitting a PR.
