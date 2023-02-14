@@ -23,8 +23,8 @@ def create_scheduled_actuator(
     request: Request, scheduled_actuator: Scheduled_Actuator = Body(...)
 ):
     sa = jsonable_encoder(scheduled_actuator)
-    new_sa = request.app.database["scheduled actuator"].insert_one(sa)
-    created_sa = request.app.database["scheduled actuators"].find_one(
+    new_sa = request.app.database["schedule_actuators"].insert_one(sa)
+    created_sa = request.app.database["scheduled_actuators"].find_one(
         {"_id": new_sa.inserted_id}
     )
 
@@ -37,7 +37,7 @@ def create_scheduled_actuator(
     response_model=List[Scheduled_Actuator],
 )
 def list_scheduled_actuators(request: Request, limit: int = 1000):
-    scheduled_actuators = list(request.app.database["scheduled actuators"].find())
+    scheduled_actuators = list(request.app.database["scheduled_actuators"].find())
     scheduled_actuators.sort(key=lambda r: r["updated_at"], reverse=True)
 
     return scheduled_actuators[:limit]
@@ -50,7 +50,7 @@ def list_scheduled_actuators(request: Request, limit: int = 1000):
 )
 def find_scheduled_actuator(id: str, request: Request):
     if (
-        sa := request.app.database["scheduled_actuator"].find_one({"_id": id})
+        sa := request.app.database["scheduled_actuators"].find_one({"_id": id})
     ) is not None:
         return sa
 
@@ -65,7 +65,7 @@ def update_scheduled_actuator(id: str, request: Request, sa: SA_Update = Body(..
     sa = {k: v for k, v in sa.dict().items() if v is not None}
 
     if len(sa) >= 1:
-        update_result = request.app.database["scheduled actuators"].update_one(
+        update_result = request.app.database["scheduled_actuators"].update_one(
             {"_id": id}, {"$set": sa}
         )
 
@@ -76,7 +76,7 @@ def update_scheduled_actuator(id: str, request: Request, sa: SA_Update = Body(..
             )
     if (
         existing_scheduled_actuator := request.app.database[
-            "scheduled actuators"
+            "scheduled_actuators"
         ].find_one({"_id": id})
     ) is not None:
         return existing_scheduled_actuator
