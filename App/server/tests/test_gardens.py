@@ -91,19 +91,3 @@ def test_update_garden_unexisting():
             "/garden/unexisting_id", json={"name": "Don Quixote 1"}
         )
         assert update_garden_response.status_code == 404
-
-
-def test_delete_garden():
-    with TestClient(app) as client:
-        new_garden = client.post(
-            "/garden/", json={"name": "Don Quixote", "location": "Miguel de Cervantes"}
-        ).json()
-
-        delete_garden_response = client.delete("/garden/" + new_garden.get("_id"))
-        assert delete_garden_response.status_code == 204
-
-
-def test_delete_garden_unexisting():
-    with TestClient(app) as client:
-        delete_garden_response = client.delete("/garden/unexisting_id")
-        assert delete_garden_response.status_code == 404

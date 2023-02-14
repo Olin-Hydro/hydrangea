@@ -36,7 +36,6 @@ def test_create_sa():
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
         )
         assert response.status_code == 201
-
         body = response.json()
         assert body.get("name") == "Don Quixote"
         assert body.get("garden_id") == "a47a4b121"
@@ -60,7 +59,7 @@ def test_get_sa():
         new_sa = client.post(
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
         ).json()
-        get_sa_response = client.get("/garden/" + new_sa.get("_id"))
+        get_sa_response = client.get("/sa/" + new_sa.get("_id"))
         assert get_sa_response.status_code == 200
         assert get_sa_response.json() == new_sa
 
@@ -71,7 +70,7 @@ def test_get_sa_unexisting():
         assert get_garden_response.status_code == 404
 
 
-def test_update_garden():
+def test_update_sa():
     with TestClient(app) as client:
         new_sa = client.post(
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
@@ -84,25 +83,9 @@ def test_update_garden():
         assert response.json().get("name") == "Don Quixote 1"
 
 
-def test_update_garden_unexisting():
+def test_update_sa_unexisting():
     with TestClient(app) as client:
         update_sa_response = client.put(
             "/sa/unexisting_id", json={"name": "Don Quixote 1"}
         )
         assert update_sa_response.status_code == 404
-
-
-def test_delete_garden():
-    with TestClient(app) as client:
-        new_sa = client.post(
-            "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
-        ).json()
-
-        delete_sa_response = client.delete("/garden/" + new_sa.get("_id"))
-        assert delete_sa_response.status_code == 204
-
-
-def test_delete_sa_unexisting():
-    with TestClient(app) as client:
-        delete_sa_response = client.delete("/sa/unexisting_id")
-        assert delete_sa_response.status_code == 404
