@@ -1,7 +1,7 @@
 import sys
 from typing import List
 
-from fastapi import APIRouter, Body, HTTPException, Request, Response, status
+from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
 try:

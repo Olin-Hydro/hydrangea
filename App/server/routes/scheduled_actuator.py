@@ -23,7 +23,7 @@ def create_scheduled_actuator(
     request: Request, scheduled_actuator: Scheduled_Actuator = Body(...)
 ):
     sa = jsonable_encoder(scheduled_actuator)
-    new_sa = request.app.database["schedule_actuators"].insert_one(sa)
+    new_sa = request.app.database["scheduled_actuators"].insert_one(sa)
     created_sa = request.app.database["scheduled_actuators"].find_one(
         {"_id": new_sa.inserted_id}
     )

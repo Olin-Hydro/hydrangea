@@ -1,7 +1,7 @@
 import sys
 from typing import List
 
-from fastapi import APIRouter, Body, HTTPException, Request, Response, status
+from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
 try:
@@ -68,19 +68,6 @@ def update_garden(id: str, request: Request, garden: GardenUpdate = Body(...)):
         existing_garden := request.app.database["gardens"].find_one({"_id": id})
     ) is not None:
         return existing_garden
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail=f"Garden with ID {id} not found"
-    )
-
-
-@router.delete("/{id}", response_description="Delete a garden")
-def delete_garden(id: str, request: Request, response: Response):
-    delete_result = request.app.database["gardens"].delete_one({"_id": id})
-
-    if delete_result.deleted_count == 1:
-        response.status_code = status.HTTP_204_NO_CONTENT
-        return response
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND, detail=f"Garden with ID {id} not found"
