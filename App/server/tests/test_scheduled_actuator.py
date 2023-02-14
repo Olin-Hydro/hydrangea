@@ -20,7 +20,10 @@ app.include_router(sa_router, tags=["scheduled_actuators"], prefix="/sa")
 
 @app.on_event("startup")
 async def startup_event():
-    app.mongodb_client = MongoClient(os.environ["ATLAS_URI"])
+    if os.environ["ATLAS_URI"]:
+        app.mongodb_client = MongoClient(os.environ["ATLAS_URI"])
+    else:
+        app.mongodb_client = MongoClient()
     app.database = app.mongodb_client[os.environ["DB_NAME"] + "test"]
 
 

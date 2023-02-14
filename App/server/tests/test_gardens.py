@@ -21,7 +21,10 @@ app.include_router(garden_router, tags=["gardens"], prefix="/garden")
 
 @app.on_event("startup")
 async def startup_event():
-    app.mongodb_client = MongoClient(os.environ["ATLAS_URI"])
+    if os.environ["ATLAS_URI"]:
+        app.mongodb_client = MongoClient(os.environ["ATLAS_URI"])
+    else:
+        app.mongodb_client = MongoClient()
     app.database = app.mongodb_client[os.environ["DB_NAME"] + "test"]
 
 
