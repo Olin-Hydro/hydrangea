@@ -37,13 +37,19 @@ async def shutdown_event():
 def test_create_garden():
     with TestClient(app) as client:
         response = client.post(
-            "/garden/", json={"name": "Don Quixote", "location": "Miguel de Cervantes"}
+            "/garden/",
+            json={
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+                "config_id": "123",
+            },
         )
         assert response.status_code == 201
 
         body = response.json()
         assert body.get("name") == "Don Quixote"
         assert body.get("location") == "Miguel de Cervantes"
+        assert body.get("config_id") == "123"
         assert "_id" in body
 
 
@@ -62,7 +68,12 @@ def test_create_garden_missing_location():
 def test_get_garden():
     with TestClient(app) as client:
         new_garden = client.post(
-            "/garden/", json={"name": "Don Quixote", "location": "Miguel de Cervantes"}
+            "/garden/",
+            json={
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+                "config_id": "abc",
+            },
         ).json()
         get_garden_response = client.get("/garden/" + new_garden.get("_id"))
         assert get_garden_response.status_code == 200
@@ -78,7 +89,12 @@ def test_get_garden_unexisting():
 def test_update_garden():
     with TestClient(app) as client:
         new_garden = client.post(
-            "/garden/", json={"name": "Don Quixote", "location": "Miguel de Cervantes"}
+            "/garden/",
+            json={
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+                "config_id": "abc",
+            },
         ).json()
 
         response = client.put(
