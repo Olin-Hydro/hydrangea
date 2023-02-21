@@ -37,11 +37,11 @@ async def shutdown_event():
 def test_create_command():
     with TestClient(app) as client:
         response = client.post(
-            "/cmd/", json={"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}
+            "/cmd/", json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}]
         )
         assert response.status_code == 201
 
-        body = response.json()
+        body = response.json()[0]
         assert body.get("cmd") == 1
         assert body.get("type") == "reactive actuator"
         assert body.get("garden_id") == "abc"
@@ -57,8 +57,8 @@ def test_create_command_missing_field():
 def test_get_cmd():
     with TestClient(app) as client:
         new_cmd = client.post(
-            "/cmd/", json={"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}
-        ).json()
+            "/cmd/", json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}]
+        ).json()[0]
         get_cmd_response = client.get("/cmd/" + new_cmd.get("_id"))
         assert get_cmd_response.status_code == 200
         assert get_cmd_response.json() == new_cmd

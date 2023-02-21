@@ -16,18 +16,20 @@ router = APIRouter()
 
 @router.post(
     "/",
-    response_description="Create a new command",
+    response_description="Create new commands",
     status_code=status.HTTP_201_CREATED,
-    response_model=Command,
+    response_model=List[Command],
 )
-def create_command(request: Request, command: Command = Body(...)):
-    cmd = jsonable_encoder(command)
-    new_cmd = request.app.database["commands"].insert_one(cmd)
-    created_cmd = request.app.database["commands"].find_one(
-        {"_id": new_cmd.inserted_id}
-    )
-
-    return created_cmd
+def create_command(request: Request, commands: List[Command] = Body(...)):
+    created_cmds = []
+    for command in commands:
+        cmd = jsonable_encoder(command)
+        new_cmd = request.app.database["commands"].insert_one(cmd)
+        created_cmd = request.app.database["commands"].find_one(
+            {"_id": new_cmd.inserted_id}
+        )
+        created_cmds.append(created_cmd)
+    return created_cmds
 
 
 @router.get("/", response_description="List commands", response_model=List[Command])

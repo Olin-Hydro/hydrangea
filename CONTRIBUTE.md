@@ -87,13 +87,13 @@ and actuators, as well as recording actions and readings.
 
 ### Gardens
 
-| Name       | Type                 |
-| ---------- | -------------------- |
-| id         | `Key`                |
-| name       | `String`             |
-| config     | `Operational Config` |
-| location   | `String`             |
-| created_at | `Datetime`           |
+| Name       | Type          |
+| ---------- | ------------- |
+| id         | `Key`         |
+| name       | `String`      |
+| config_id  | `Foreign Key` |
+| location   | `String`      |
+| created_at | `Datetime`    |
 
 # Commands
 
@@ -144,14 +144,14 @@ The Configurations Table will be used in conjunction with logging data in
 
 ### Operational Config
 
-| Name                | Type       |
-| ------------------- | ---------- |
-| id                  | `Key`      |
-| name                | `String`   |
-| sensors             | `[SS]`     |
-| scheduled_actuators | `[SAS]`    |
-| reactive_actuators  | `[RAS]`    |
-| created_at          | `Datetime` |
+| Name             | Type       |
+| ---------------- | ---------- |
+| id               | `Key`      |
+| name             | `String`   |
+| sensor_schedules | `[ss]`     |
+| sa_schedules     | `[sas]`    |
+| ra_schedules     | `[ras]`    |
+| created_at       | `Datetime` |
 
 ### Sensor Schedule (SS)
 
