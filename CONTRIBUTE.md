@@ -272,6 +272,8 @@ Example:
 
 ## Logging
 
+*Parameter `start` and `end` need to be in "YYYY-mm-DDTHH:MM:SS.ms±hh:mm" format (ex. "2023-02-22T11:33:08.297429-05:00")*
+
 ### Sensor
 
 | Verb | URI Pattern                  | Params                                 | Controller Action                                                                               |
@@ -285,7 +287,7 @@ Example:
 | Verb | URI Pattern                     | Params                                 | Controller Action                                                                |
 | ---- | ------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------- |
 | GET  | `/ra/logging/actions/`          | limit: int,start: ISO8601,end: ISO8601 | `view all actions between start and end time and up to limit number of logs`     |
-| GET  | `/ra/logging/actions/:actionId` | limit: int,start: ISO8601,end: ISO8601 | `view actions for a specific actuator between start and end time and up to limit number of logs` |
+| GET  | `/ra/logging/actions/:actuatorId` | limit: int,start: ISO8601,end: ISO8601 | `view actions for a specific actuator between start and end time and up to limit number of logs` |
 | POST | `/ra/logging/actions/`          |                                        | `add actions`                                                                    |
 
 ### Scheduled Actions
@@ -293,7 +295,7 @@ Example:
 | Verb | URI Pattern                     | Params                                 | Controller Action                                                                |
 | ---- | ------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------- |
 | GET  | `/sa/logging/actions/`          | limit: int,start: ISO8601,end: ISO8601 | `view all actions between start and end time and up to limit number of logs`     |
-| GET  | `/sa/logging/actions/:actionId` | limit: int,start: ISO8601,end: ISO8601 | `view actions for a specific actuator between start and end time and up to limit number of logs` |
+| GET  | `/sa/logging/actions/:actuatorId` | limit: int,start: ISO8601,end: ISO8601 | `view actions for a specific actuator between start and end time and up to limit number of logs` |
 | POST | `/sa/logging/actions/`          | limit: int,start: ISO8601,end: ISO8601 | `add actions`                                                                    |
 
 ## Unit Testing

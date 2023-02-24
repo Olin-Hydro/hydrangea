@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta
 import sys
 from typing import List
-
+import pytz
 
 from fastapi import APIRouter, Body, HTTPException, Request, status, Query
 from fastapi.encoders import jsonable_encoder
@@ -12,6 +13,7 @@ except ModuleNotFoundError:
     from server.models.logging import Reading, Scheduled_Action, Reactive_Action
 
 router = APIRouter()
+ISO8601_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 
 
 @router.post(
@@ -43,9 +45,21 @@ def create_reactive_actuator(request: Request, reading: Reading = Body(...)):
 def list_readings(
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             readings := list(
@@ -54,7 +68,7 @@ def list_readings(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         readings.sort(key=lambda r: r["updated_at"], reverse=True)
         return readings[:limit]
@@ -73,9 +87,21 @@ def find_readings(
     sensor_id,
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             readings := list(
@@ -84,7 +110,7 @@ def find_readings(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         readings.sort(key=lambda r: r["updated_at"], reverse=True)
         return readings[:limit]
@@ -97,17 +123,18 @@ def find_readings(
 
 @router.post(
     "/sa/logging/actions/",
-    response_description="Create a new scheduled action",
+    response_description="Create a new scheduled action log",
     status_code=status.HTTP_201_CREATED,
     response_model=Scheduled_Action,
 )
-def create_scheduled_action(request: Request, scheduled_action: Reading = Body(...)):
+def create_scheduled_action(
+    request: Request, scheduled_action: Scheduled_Action = Body(...)
+):
     scheduled_action = jsonable_encoder(scheduled_action)
     actuator_id = scheduled_action.get("actuator_id")
     if (
-        len(request.app.database["scheduled_actuators"].find_one({"_id": actuator_id}))
-        is not 0
-    ):
+        request.app.database["scheduled_actuators"].find_one({"_id": actuator_id})
+    ) is not None:
         new_scheduled_action = request.app.database["scheduled_actions"].insert_one(
             scheduled_action
         )
@@ -123,15 +150,27 @@ def create_scheduled_action(request: Request, scheduled_action: Reading = Body(.
 
 @router.get(
     "/sa/logging/actions/",
-    response_description="List all scheduled actions in the given time period",
+    response_description="List all scheduled action logs in the given time period",
     response_model=List[Scheduled_Action],
 )
 def list_scheduled_actions(
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             scheduled_actions := list(
@@ -140,7 +179,7 @@ def list_scheduled_actions(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         scheduled_actions.sort(key=lambda r: r["updated_at"], reverse=True)
         return scheduled_actions[:limit]
@@ -151,17 +190,29 @@ def list_scheduled_actions(
 
 
 @router.get(
-    "/sa/logging/actions/{id}",
-    response_description="List scheduled actions for a specific actuator in the given time period",
+    "/sa/logging/actions/{actuator_id}",
+    response_description="List scheduled action logs for a specific actuator in the given time period",
     response_model=List[Scheduled_Action],
 )
 def find_scheduled_actions(
     actuator_id,
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             scheduled_actions := list(
@@ -173,7 +224,7 @@ def find_scheduled_actions(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         scheduled_actions.sort(key=lambda r: r["updated_at"], reverse=True)
         return scheduled_actions[:limit]
@@ -186,7 +237,7 @@ def find_scheduled_actions(
 
 @router.post(
     "/ra/logging/actions/",
-    response_description="Create a new reactive action",
+    response_description="Create a new reactive action log",
     status_code=status.HTTP_201_CREATED,
     response_model=Reactive_Action,
 )
@@ -196,9 +247,8 @@ def create_reactive_action(
     reactive_action = jsonable_encoder(reactive_action)
     actuator_id = reactive_action.get("actuator_id")
     if (
-        len(request.app.database["reactive_actuators"].find_one({"_id": actuator_id}))
-        is not 0
-    ):
+        request.app.database["reactive_actuators"].find_one({"_id": actuator_id})
+    ) is not None:
         new_reactive_action = request.app.database["reactive_actions"].insert_one(
             reactive_action
         )
@@ -214,15 +264,27 @@ def create_reactive_action(
 
 @router.get(
     "/ra/logging/actions/",
-    response_description="List all reactive actions in the given time period",
+    response_description="List all reactive action logs in the given time period",
     response_model=List[Reactive_Action],
 )
 def list_reactive_actions(
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             reactive_actions := list(
@@ -231,7 +293,7 @@ def list_reactive_actions(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         reactive_actions.sort(key=lambda r: r["updated_at"], reverse=True)
         return reactive_actions[:limit]
@@ -242,17 +304,29 @@ def list_reactive_actions(
 
 
 @router.get(
-    "/ra/logging/actions/{id}",
-    response_description="List reactive actions for a specific actuator in the given time period",
+    "/ra/logging/actions/{actuator_id}",
+    response_description="List reactive action logs for a specific actuator in the given time period",
     response_model=List[Reactive_Action],
 )
 def find_reactive_actions(
     actuator_id,
     request: Request,
     limit: int = 1000,
-    start: str = Query(default=...),
-    end: str = Query(default=...),
+    start: str = Query(
+        default=(
+            datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+        ).strftime(ISO8601_FORMAT)
+    ),
+    end: str = Query(
+        default=(datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT))
+    ),
 ):
+    try:
+        for time in [start, end]:
+            datetime.strptime(time, ISO8601_FORMAT)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid time format")
+
     if (
         len(
             reactive_actions := list(
@@ -264,7 +338,7 @@ def find_reactive_actions(
                 )
             )
         )
-        is not 0
+        != 0
     ):
         reactive_actions.sort(key=lambda r: r["updated_at"], reverse=True)
         return reactive_actions[:limit]
