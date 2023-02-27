@@ -18,7 +18,7 @@ jobs:
           site-packages
       - name: build zip
         run: |
-          cd site-packages && zip -r9 ../deployment.zip . && cd ../App/server && zip -g ../deployment.zip app.py
+          cd site-packages && zip -r9 ../deployment.zip . && cd ../App/server && zip -g ../../deployment.zip app.py
       - name: deploy to lambda
         uses: appleboy/lambda-action@master
         with:
