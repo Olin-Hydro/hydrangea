@@ -11,5 +11,6 @@ requests
 pytest==7.2.0
 beanie==1.11.6
 asgi_lifespan==1.0.1
+mangum==0.17.0
 # To mock database
 pytest-docker[docker-compose-v1]
