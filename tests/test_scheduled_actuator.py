@@ -1,5 +1,4 @@
 import os
-import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -8,11 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-sys.path.append("../server")
 
-from App.server.routes.scheduled_actuator import router as sa_router
+from app.routes.scheduled_actuator import router as sa_router
 
 app = FastAPI()
 app.include_router(sa_router, tags=["scheduled_actuators"], prefix="/sa")

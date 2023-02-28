@@ -2,12 +2,12 @@ import os
 
 from fastapi import FastAPI
 from pymongo import MongoClient
-from server.routes.garden import router as garden_router
-from server.routes.sensor import router as sensor_router
-from server.routes.scheduled_actuator import router as scheduled_actuator_router
-from server.routes.reactive_actuator import router as reactive_actuator_router
-from server.routes.command import router as command_router
-from server.routes.config import router as config_router
+from app.routes.garden import router as garden_router
+from app.routes.sensor import router as sensor_router
+from app.routes.scheduled_actuator import router as scheduled_actuator_router
+from app.routes.reactive_actuator import router as reactive_actuator_router
+from app.routes.command import router as command_router
+from app.routes.config import router as config_router
 from dotenv import load_dotenv
 from mangum import Mangum
 

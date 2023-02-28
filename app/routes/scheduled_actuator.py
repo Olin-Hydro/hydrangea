@@ -1,14 +1,9 @@
-import sys
 from typing import List
 
 from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
-try:
-    from App.server.models.scheduled_actuator import Scheduled_Actuator, SA_Update
-except ModuleNotFoundError:
-    sys.path.append("../server")
-    from server.models.scheduled_actuator import Scheduled_Actuator, SA_Update
+from app.models.scheduled_actuator import Scheduled_Actuator, SA_Update
 
 router = APIRouter()
 

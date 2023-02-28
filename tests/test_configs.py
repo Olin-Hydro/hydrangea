@@ -1,5 +1,4 @@
 import os
-import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -8,12 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-sys.path.append("../server")
 
-
-from App.server.routes.config import router as config_router
+from app.routes.config import router as config_router
 
 app = FastAPI()
 app.include_router(config_router, tags=["configs"], prefix="/config")

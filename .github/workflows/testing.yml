@@ -10,7 +10,6 @@ permissions:
   contents: read
 
 env:
-  PORT: ${{ secrets.PORT }}
   ATLAS_URI: ${{ secrets.ATLAS_URI }}
   DB_NAME: ${{ secrets.DB_NAME }}
 
