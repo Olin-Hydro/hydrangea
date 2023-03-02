@@ -9,7 +9,7 @@ class Garden(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     name: str = Field(...)
     location: str = Field(...)
-    config_id: Optional[str] = Field(...)
+    config_id: Optional[str] = None
     created_at: datetime = datetime.utcnow()
     updated_at: datetime = datetime.utcnow()
 
