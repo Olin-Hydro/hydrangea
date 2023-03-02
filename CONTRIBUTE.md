@@ -55,7 +55,7 @@ They should run automatically on commit.
 To run the API from root directory, run
 
 ```
-uvicorn server.main:app --port 8080 --reload
+uvicorn app.main:app --port 8000 --reload
 ```
 
 Navigate to /docs to view all our routes and examples.
@@ -68,5 +68,5 @@ python3 -m pytest
 
 ## Unit Testing
 
-If you want to contribute, make sure to test all of your schema/routes in
-App/server/tests before submitting a PR.
+If you want to contribute, make sure to test all of your schema/routes in tests/
+before submitting a PR.
