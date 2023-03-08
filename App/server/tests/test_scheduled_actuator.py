@@ -69,8 +69,8 @@ def test_get_sa():
 
 def test_get_sa_unexisting():
     with TestClient(app) as client:
-        get_garden_response = client.get("/sa/unexisting_id")
-        assert get_garden_response.status_code == 404
+        get_sa_response = client.get("/sa/unexisting_id")
+        assert get_sa_response.status_code == 404
 
 
 def test_update_sa():

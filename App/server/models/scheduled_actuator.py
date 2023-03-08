@@ -1,4 +1,5 @@
 import uuid
+import pytz
 from datetime import datetime
 from typing import Optional
 
@@ -9,8 +10,8 @@ class Scheduled_Actuator(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     name: str = Field(...)
     garden_id: str = Field(...)
-    created_at: datetime = datetime.utcnow()
-    updated_at: datetime = datetime.utcnow()
+    created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
         allow_population_by_field_name = True
@@ -18,7 +19,7 @@ class Scheduled_Actuator(BaseModel):
 
         @root_validator
         def number_validator(cls, values):
-            values["updated_at"] = datetime.utcnow()
+            values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
 
 
