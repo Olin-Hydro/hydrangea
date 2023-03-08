@@ -16,8 +16,11 @@ class Sensor(BaseModel):
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
-                "name": "Humidity",
-                "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
+                "_id": "5ff70c48-7a56-47fe-b7d9-8df3be3e3197",
+                "name": "pH",
+                "garden_id": "66608a32-a24c-4b70-ae2c-c46c586ea0c3",
+                "created_at": "2023-02-17T20:19:00.541216",
+                "updated_at": "2023-02-17T20:19:00.541217",
             }
         }
 
@@ -34,7 +37,7 @@ class SensorUpdate(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "name": "Temp",
+                "name": "pH",
                 "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
             }
         }
