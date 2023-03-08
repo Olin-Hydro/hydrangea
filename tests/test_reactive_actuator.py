@@ -8,11 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-sys.path.append("../server")
-
-from App.server.routes.reactive_actuator import router as ra_router
+from app.routes.reactive_actuator import router as ra_router
 
 app = FastAPI()
 app.include_router(ra_router, tags=["reactive_actuator"], prefix="/ra")

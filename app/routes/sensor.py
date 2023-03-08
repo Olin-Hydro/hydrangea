@@ -1,17 +1,9 @@
-import os
-import sys
 from typing import List
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
 from fastapi import APIRouter, Body, HTTPException, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 
-try:
-    from App.server.models.sensor import Sensor, SensorUpdate
-except ModuleNotFoundError:
-    sys.path.append("../server")
-    from App.server.models.sensor import Sensor, SensorUpdate
+from app.models.sensor import Sensor, SensorUpdate
 
 router = APIRouter()
 

@@ -1,16 +1,11 @@
 from datetime import datetime, timedelta
-import sys
 from typing import List
 import pytz
 
 from fastapi import APIRouter, Body, HTTPException, Request, status, Query
 from fastapi.encoders import jsonable_encoder
 
-try:
-    from App.server.models.logging import Reading, Scheduled_Action, Reactive_Action
-except ModuleNotFoundError:
-    sys.path.append("../server")
-    from server.models.logging import Reading, Scheduled_Action, Reactive_Action
+from app.models.logging import Reading, Scheduled_Action, Reactive_Action
 
 router = APIRouter()
 ISO8601_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
@@ -74,7 +69,7 @@ def list_readings(
         return readings[:limit]
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"No actions were found within the time period",
+        detail="No actions were found within the time period",
     )
 
 
@@ -185,7 +180,7 @@ def list_scheduled_actions(
         return scheduled_actions[:limit]
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"No actions were found within the time period",
+        detail="No actions were found within the time period",
     )
 
 
@@ -299,7 +294,7 @@ def list_reactive_actions(
         return reactive_actions[:limit]
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"No actions were found within the time period",
+        detail="No actions were found within the time period",
     )
 
 

@@ -1,20 +1,13 @@
-import sys
 from typing import List
 
 from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
-try:
-    from App.server.models.config import (
-        Config,
-        ConfigUpdate,
-    )
-except ModuleNotFoundError:
-    sys.path.append("../server")
-    from App.server.models.config import (
-        Config,
-        ConfigUpdate,
-    )
+
+from app.models.config import (
+    Config,
+    ConfigUpdate,
+)
 
 
 router = APIRouter()

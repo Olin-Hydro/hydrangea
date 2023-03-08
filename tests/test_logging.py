@@ -10,15 +10,11 @@ import pytz
 
 load_dotenv()
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-sys.path.append("../server")
-
-from App.server.routes.sensor import router as sensor_router
-from App.server.routes.garden import router as garden_router
-from App.server.routes.reactive_actuator import router as ra_router
-from App.server.routes.scheduled_actuator import router as sa_router
-from App.server.routes.logging import router as logging_router
+from app.routes.sensor import router as sensor_router
+from app.routes.garden import router as garden_router
+from app.routes.reactive_actuator import router as ra_router
+from app.routes.scheduled_actuator import router as sa_router
+from app.routes.logging import router as logging_router
 
 app = FastAPI()
 

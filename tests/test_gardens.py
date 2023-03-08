@@ -1,5 +1,4 @@
 import os
-import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -8,12 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-parent = os.path.abspath(".")
-sys.path.append(parent)
-sys.path.append("../server")
 
-
-from App.server.routes.garden import router as garden_router
+from app.routes.garden import router as garden_router
 
 app = FastAPI()
 app.include_router(garden_router, tags=["gardens"], prefix="/garden")

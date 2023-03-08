@@ -1,14 +1,9 @@
-import sys
 from typing import List
 
 from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
-try:
-    from App.server.models.garden import Garden, GardenUpdate
-except ModuleNotFoundError:
-    sys.path.append("../server")
-    from server.models.garden import Garden, GardenUpdate
+from app.models.garden import Garden, GardenUpdate
 
 
 router = APIRouter()
