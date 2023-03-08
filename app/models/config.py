@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import Optional, List
+import pytz
 
 from pydantic import BaseModel, Field, root_validator
 
@@ -30,45 +31,53 @@ class Config(BaseModel):
     sensor_schedule: List[SensorSchedule] = Field(...)
     ra_schedule: List[RASchedule] = Field(...)
     sa_schedule: List[SASchedule] = Field(...)
-    created_at: datetime = datetime.utcnow()
-    updated_at: datetime = datetime.utcnow()
+    created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
-                "name": "Config",
-                "sensor_schedule": [{"sensor_id": "abc", "interval": 300}],
+                "_id": "b67cd1cf-e113-40cf-a293-ba80251e03ce",
+                "name": "TestConfig",
+                "sensor_schedule": [
+                    {
+                        "sensor_id": "66608a32-a24c-4b70-ae2c-c46c586ea0c3",
+                        "interval": 300.0,
+                    }
+                ],
                 "ra_schedule": [
                     {
-                        "ra_id": "bcd",
-                        "interval": 1200,
+                        "ra_id": "5e9b44c7-970a-41f0-8ef4-e4dbf82f00c3",
+                        "interval": 1200.0,
                         "threshold": 7.5,
-                        "duration": 5,
-                        "threshold_type": 0,
+                        "duration": 5.0,
+                        "threshold_type": 1,
                     }
                 ],
                 "sa_schedule": [
                     {
-                        "sa_id": "ccd",
+                        "sa_id": "15a2a241-cf21-4365-af45-3d140712f2b8",
                         "on": [
-                            "2023-02-17T08:09:50+0000",
-                            "2023-02-17T16:09:50+0000",
-                            "2023-02-17T20:09:50+0000",
+                            "2023-02-17T08:09:50+00:00",
+                            "2023-02-17T16:09:50+00:00",
+                            "2023-02-17T20:09:50+00:00",
                         ],
                         "off": [
-                            "2023-02-17T08:29:50+0000",
-                            "2023-02-17T16:29:50+0000",
-                            "2023-02-17T20:29:50+0000",
+                            "2023-02-17T08:29:50+00:00",
+                            "2023-02-17T16:29:50+00:00",
+                            "2023-02-17T20:29:50+00:00",
                         ],
                     }
                 ],
+                "created_at": "2023-02-18T21:15:12.005399",
+                "updated_at": "2023-02-18T21:15:12.005400",
             }
         }
 
         @root_validator
         def number_validator(cls, values):
-            values["updated_at"] = datetime.utcnow()
+            values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
 
 

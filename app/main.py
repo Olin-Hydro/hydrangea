@@ -8,6 +8,7 @@ from app.routes.scheduled_actuator import router as scheduled_actuator_router
 from app.routes.reactive_actuator import router as reactive_actuator_router
 from app.routes.command import router as command_router
 from app.routes.config import router as config_router
+from app.routes.logging import router as logging_router
 from dotenv import load_dotenv
 from mangum import Mangum
 
@@ -38,6 +39,7 @@ app.include_router(
 )
 app.include_router(reactive_actuator_router, tags=["reactive_actuators"], prefix="/ra")
 app.include_router(command_router, tags=["commands"], prefix="/cmd")
+app.include_router(logging_router, tags=["logging"])
 app.include_router(config_router, tags=["configs"], prefix="/config")
 
 

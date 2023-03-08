@@ -56,7 +56,7 @@ def update_garden(id: str, request: Request, garden: GardenUpdate = Body(...)):
         if update_result.modified_count == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Garden with ID {id} not found",
+                detail="Nothing was updated",
             )
 
     if (
