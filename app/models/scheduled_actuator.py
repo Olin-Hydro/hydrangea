@@ -33,6 +33,7 @@ class Scheduled_Actuator(BaseModel):
 
 class SA_Update(BaseModel):
     name: Optional[str]
+    garden_id: Optional[str]
 
     class Config:
         schema_extra = {"example": {"name": "Don Quixote", "garden_id": "a47a4b121"}}
