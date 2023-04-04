@@ -5,10 +5,10 @@ from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+from app.routes.command import router as command_router
+
 load_dotenv()
 
-
-from app.routes.command import router as command_router
 
 app = FastAPI()
 app.include_router(command_router, tags=["commands"], prefix="/cmd")
@@ -32,7 +32,15 @@ async def shutdown_event():
 def test_create_command():
     with TestClient(app) as client:
         response = client.post(
-            "/cmd/", json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}]
+            "/cmd/",
+            json=[
+                {
+                    "ref_id": "btnrj",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                }
+            ],
         )
         assert response.status_code == 201
 
@@ -52,7 +60,15 @@ def test_create_command_missing_field():
 def test_get_cmd():
     with TestClient(app) as client:
         new_cmd = client.post(
-            "/cmd/", json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}]
+            "/cmd/",
+            json=[
+                {
+                    "ref_id": "hsdjfsk",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                }
+            ],
         ).json()[0]
         get_cmd_response = client.get("/cmd/" + new_cmd.get("_id"))
         assert get_cmd_response.status_code == 200
