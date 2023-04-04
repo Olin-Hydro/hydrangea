@@ -33,6 +33,7 @@ class Reactive_Actuator(BaseModel):
 
 class RA_Update(BaseModel):
     name: Optional[str]
+    sensor_id: Optional[str]
 
     class Config:
         schema_extra = {"example": {"name": "Don Quixote", "sensor_id": "a47a4b121"}}
