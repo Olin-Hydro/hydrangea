@@ -4,11 +4,10 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from app.routes.garden import router as garden_router
 
 load_dotenv()
 
-
-from app.routes.garden import router as garden_router
 
 app = FastAPI()
 app.include_router(garden_router, tags=["gardens"], prefix="/garden")
@@ -50,7 +49,9 @@ def test_create_garden():
 
 def test_create_garden_missing_name():
     with TestClient(app) as client:
-        response = client.post("/garden/", json={"location": "Miguel de Cervantes"})
+        response = client.post(
+            "/garden/", json={"location": "Miguel de Cervantes"}
+        )
         assert response.status_code == 422
 
 

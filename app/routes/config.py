@@ -32,7 +32,9 @@ def create_config(request: Request, config: Config = Body(...)):
     return created_config
 
 
-@router.get("/", response_description="List configs", response_model=List[Config])
+@router.get(
+    "/", response_description="List configs", response_model=List[Config]
+)
 def list_configs(request: Request, limit: int = 1000):
     configs = list(request.app.database[CONFIG_TABLE_NAME].find())
     configs.sort(key=lambda r: r["updated_at"], reverse=True)
@@ -40,7 +42,9 @@ def list_configs(request: Request, limit: int = 1000):
 
 
 @router.get(
-    "/{id}", response_description="Get a single config by id", response_model=Config
+    "/{id}",
+    response_description="Get a single config by id",
+    response_model=Config,
 )
 def find_config(id: str, request: Request):
     if (
@@ -49,11 +53,14 @@ def find_config(id: str, request: Request):
         return config
 
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail=f"Config with ID {id} not found"
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Config with ID {id} not found",
     )
 
 
-@router.put("/{id}", response_description="Update a config", response_model=Config)
+@router.put(
+    "/{id}", response_description="Update a config", response_model=Config
+)
 def update_config(id: str, request: Request, config: ConfigUpdate = Body(...)):
     config = {k: v for k, v in config.dict().items() if v is not None}
     if len(config) >= 1:
@@ -66,10 +73,13 @@ def update_config(id: str, request: Request, config: ConfigUpdate = Body(...)):
                 detail=f"Config with ID {id} not found",
             )
     if (
-        existing_config := request.app.database[CONFIG_TABLE_NAME].find_one({"_id": id})
+        existing_config := request.app.database[CONFIG_TABLE_NAME].find_one(
+            {"_id": id}
+        )
     ) is not None:
         return existing_config
 
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail=f"Config with ID {id} not found"
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Config with ID {id} not found",
     )

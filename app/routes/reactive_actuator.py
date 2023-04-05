@@ -32,7 +32,9 @@ def create_reactive_actuator(
     response_model=List[Reactive_Actuator],
 )
 def list_reactive_actuators(request: Request, limit: int = 1000):
-    reactive_actuators = list(request.app.database["reactive_actuators"].find())
+    reactive_actuators = list(
+        request.app.database["reactive_actuators"].find()
+    )
     reactive_actuators.sort(key=lambda r: r["updated_at"], reverse=True)
 
     return reactive_actuators[:limit]
@@ -56,7 +58,9 @@ def find_reactive_actuator(id: str, request: Request):
 
 
 @router.put("/{id}", response_description="Update a reactive actuator")
-def update_reactive_actuator(id: str, request: Request, ra: RA_Update = Body(...)):
+def update_reactive_actuator(
+    id: str, request: Request, ra: RA_Update = Body(...)
+):
     ra = {k: v for k, v in ra.dict().items() if v is not None}
 
     if len(ra) >= 1:
@@ -66,9 +70,9 @@ def update_reactive_actuator(id: str, request: Request, ra: RA_Update = Body(...
 
         if update_result.modified_count == 1:
             if (
-                updated_ra := request.app.database["reactive_actuators"].find_one(
-                    {"_id": id}
-                )
+                updated_ra := request.app.database[
+                    "reactive_actuators"
+                ].find_one({"_id": id})
             ) is not None:
                 return updated_ra
 

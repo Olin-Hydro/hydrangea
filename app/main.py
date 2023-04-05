@@ -37,7 +37,9 @@ app.include_router(sensor_router, tags=["sensors"], prefix="/sensor")
 app.include_router(
     scheduled_actuator_router, tags=["scheduled_actuators"], prefix="/sa"
 )
-app.include_router(reactive_actuator_router, tags=["reactive_actuators"], prefix="/ra")
+app.include_router(
+    reactive_actuator_router, tags=["reactive_actuators"], prefix="/ra"
+)
 app.include_router(command_router, tags=["commands"], prefix="/cmd")
 app.include_router(logging_router, tags=["logging"])
 app.include_router(config_router, tags=["configs"], prefix="/config")

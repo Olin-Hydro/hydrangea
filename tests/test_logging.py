@@ -1,20 +1,18 @@
 from datetime import datetime
 import os
-import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import pytz
-
-load_dotenv()
-
 from app.routes.sensor import router as sensor_router
 from app.routes.garden import router as garden_router
 from app.routes.reactive_actuator import router as ra_router
 from app.routes.scheduled_actuator import router as sa_router
 from app.routes.logging import router as logging_router
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -59,7 +57,8 @@ def test_create_reading():
             },
         ).json()
         response = client.post(
-            "/sensors/logging/", json={"sensor_id": new_sensor.get("_id"), "value": "5"}
+            "/sensors/logging/",
+            json={"sensor_id": new_sensor.get("_id"), "value": "5"},
         )
         assert response.status_code == 201
         body = response.json()
@@ -108,10 +107,13 @@ def test_list_reading():
             },
         ).json()
         new_reading = client.post(
-            "/sensors/logging/", json={"sensor_id": new_sensor.get("_id"), "value": "5"}
+            "/sensors/logging/",
+            json={"sensor_id": new_sensor.get("_id"), "value": "5"},
         ).json()
         start = new_reading.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_reading_response = client.get(
             "/sensors/logging/" + "?start=" + start + "&end=" + end
         )
@@ -149,10 +151,13 @@ def test_find_reading():
             },
         ).json()
         new_reading = client.post(
-            "/sensors/logging/", json={"sensor_id": new_sensor.get("_id"), "value": "5"}
+            "/sensors/logging/",
+            json={"sensor_id": new_sensor.get("_id"), "value": "5"},
         ).json()
         start = new_reading.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_reading_response = client.get(
             "/sensors/logging/"
             + new_reading.get("sensor_id")
@@ -175,9 +180,10 @@ def test_find_reading_invalid_time():
                 "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
             },
         ).json()
-        new_reading = client.post(
-            "/sensors/logging/", json={"sensor_id": new_sensor.get("_id"), "value": "5"}
-        ).json()
+        client.post(
+            "/sensors/logging/",
+            json={"sensor_id": new_sensor.get("_id"), "value": "5"},
+        )
         get_reading_response = client.get(
             "/sensors/logging/123456789?start=1234&end=5678"
         )
@@ -196,7 +202,8 @@ def test_create_sa_log():
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
         ).json()
         response = client.post(
-            "/sa/logging/actions/", json={"actuator_id": new_sa.get("_id"), "data": "5"}
+            "/sa/logging/actions/",
+            json={"actuator_id": new_sa.get("_id"), "data": "5"},
         )
         assert response.status_code == 201
         body = response.json()
@@ -238,16 +245,21 @@ def test_list_sa_logs():
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
         ).json()
         new_sa_log = client.post(
-            "/sa/logging/actions/", json={"actuator_id": new_sa.get("_id"), "data": "5"}
+            "/sa/logging/actions/",
+            json={"actuator_id": new_sa.get("_id"), "data": "5"},
         ).json()
         start = new_sa_log.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_log_response = client.get(
             "/sa/logging/actions/?limit=1&start=" + start + "&end=" + end
         )
         assert get_log_response.status_code == 200
         result = sorted(
-            get_log_response.json(), key=lambda x: x["updated_at"], reverse=True
+            get_log_response.json(),
+            key=lambda x: x["updated_at"],
+            reverse=True,
         )
         assert result[0] == new_sa_log
 
@@ -266,10 +278,13 @@ def test_find_sa_logs():
             "/sa/", json={"name": "Don Quixote", "garden_id": "a47a4b121"}
         ).json()
         new_sa_log = client.post(
-            "/sa/logging/actions/", json={"actuator_id": new_sa.get("_id"), "data": "5"}
+            "/sa/logging/actions/",
+            json={"actuator_id": new_sa.get("_id"), "data": "5"},
         ).json()
         start = new_sa_log.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_log_response = client.get(
             "/sa/logging/actions/"
             + new_sa_log.get("actuator_id")
@@ -295,7 +310,8 @@ def test_find_sa_log_invalid_time():
             json={"name": "Don Quixote", "garden_id": "a47a4b121"},
         ).json()
         client.post(
-            "/sa/logging/actions/", json={"actuator_id": new_sa.get("_id"), "data": "5"}
+            "/sa/logging/actions/",
+            json={"actuator_id": new_sa.get("_id"), "data": "5"},
         )
         get_log_response = client.get(
             "/sa/logging/actions/" + new_sa.get("_id") + "?start=1234&end=5678"
@@ -356,14 +372,18 @@ def test_list_ra_logs():
             json={"actuator_id": new_ra.get("_id"), "data": "on"},
         ).json()
         start = new_ra_log.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_log_response = client.get(
             "/ra/logging/actions/?start=" + start + "&end=" + end
         )
 
         assert get_log_response.status_code == 200
         result = sorted(
-            get_log_response.json(), key=lambda x: x["updated_at"], reverse=True
+            get_log_response.json(),
+            key=lambda x: x["updated_at"],
+            reverse=True,
         )
         assert result[0] == new_ra_log
 
@@ -405,7 +425,9 @@ def test_find_ra_logs():
             json={"actuator_id": new_ra.get("_id"), "data": "on"},
         ).json()
         start = new_ra_log.get("created_at")
-        end = datetime.now(pytz.timezone("US/Eastern")).strftime(ISO8601_FORMAT)
+        end = datetime.now(pytz.timezone("US/Eastern")).strftime(
+            ISO8601_FORMAT
+        )
         get_log_response = client.get(
             "/ra/logging/actions/"
             + new_ra_log.get("actuator_id")
