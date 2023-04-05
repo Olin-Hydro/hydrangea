@@ -32,7 +32,14 @@ def test_create_command():
     with TestClient(app) as client:
         response = client.post(
             "/cmd/",
-            json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}],
+            json=[
+                {
+                    "ref_id": "btnrj",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                }
+            ],
         )
         assert response.status_code == 201
 
@@ -53,7 +60,14 @@ def test_get_cmd():
     with TestClient(app) as client:
         new_cmd = client.post(
             "/cmd/",
-            json=[{"cmd": 1, "type": "reactive actuator", "garden_id": "abc"}],
+            json=[
+                {
+                    "ref_id": "hsdjfsk",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                }
+            ],
         ).json()[0]
         get_cmd_response = client.get("/cmd/" + new_cmd.get("_id"))
         assert get_cmd_response.status_code == 200

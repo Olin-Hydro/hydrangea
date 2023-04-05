@@ -7,6 +7,7 @@ import pytz
 
 class Command(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
+    ref_id: str = Field(...)
     cmd: int = Field(...)
     type: str = Field(...)
     garden_id: str = Field(...)
@@ -18,6 +19,7 @@ class Command(BaseModel):
         schema_extra = {
             "example": {
                 "_id": "66608a32-a24c-4b70-ae2c-c46c586ea0c3",
+                "ref_id": "36708a32-a24c-4b70-ae2c-c46c586ea0c3",
                 "cmd": 1,
                 "type": "reactive actuator",
                 "garden_id": "87808a32-a24c-4b70-ae2c-c46c586ea0c3",
