@@ -18,6 +18,12 @@ configurations into simpler commands to send to sensors and actuators, and
 [saffron](https://github.com/Olin-Hydro/saffron) a frontend dashboard to display
 garden statuses.
 
+# Using Hydrangea
+
+Hydrangea is deployed at https://hydrangea.kaz.farm. The api is currently secured behind an API key, so going to this URL will result in a 403 error. To view hydrangea provide the ```x-api-key``` header when making requests.
+
+To view a list of all the routes and supported methods, install ModHeader so that you can modify the https headers on your browser: https://chrome.google.com/webstore/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj. Next add the ```x-api-key``` header to your browser, and navigate to https://hydrangea.kaz.farm/docs. This will show you the swagger docs for our API and allow you to try out requests.
+
 # Deployment
 
 This app is deployed as an aws lambda function. This lambda function is called
