@@ -1,6 +1,7 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.openapi.docs import get_swagger_ui_html
 from pymongo import MongoClient
 from app.routes.garden import router as garden_router
 from app.routes.sensor import router as sensor_router
@@ -30,6 +31,16 @@ def startup_db_client():
 @app.on_event("shutdown")
 def shutdown_db_client():
     app.mongodb_client.close()
+
+
+@app.get("/docs", include_in_schema=False)
+def custom_swagger_ui_html(req: Request):
+    root_path = req.scope.get("root_path", "").rstrip("/")
+    openapi_url = root_path + app.openapi_url
+    return get_swagger_ui_html(
+        openapi_url=openapi_url,
+        title="API",
+    )
 
 
 app.include_router(garden_router, tags=["gardens"], prefix="/garden")
