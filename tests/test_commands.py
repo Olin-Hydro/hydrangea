@@ -4,7 +4,6 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
-
 from app.routes.command import router as command_router
 
 load_dotenv()
@@ -78,7 +77,8 @@ def test_get_cmd():
 
 def test_get_cmds_executed():
     with TestClient(app) as client:
-        new_cmd = client.post(
+
+        client.post(
             "/cmd/",
             json=[
                 {
@@ -89,7 +89,7 @@ def test_get_cmds_executed():
                     "executed": "true",
                 }
             ],
-        ).json()[0]
+        )
         get_cmd_response = client.get("/cmd/")
         assert get_cmd_response.status_code == 200
         # Should be empty because executed is true
@@ -115,8 +115,10 @@ def test_update_cmd():
                 }
             ],
         ).json()[0]
+        response = client.put(
+            "/cmd/" + new_cmd.get("_id"), json={"executed": "true"}
+        )
 
-        response = client.put("/cmd/" + new_cmd.get("_id"), json={"executed": "true"})
         assert response.status_code == 200
         assert response.json().get("executed") == "true"
 

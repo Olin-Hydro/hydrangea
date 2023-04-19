@@ -34,6 +34,9 @@ class Scheduled_Actuator(BaseModel):
 class SA_Update(BaseModel):
     name: Optional[str]
     garden_id: Optional[str]
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {"example": {"name": "Don Quixote", "garden_id": "a47a4b121"}}
+        schema_extra = {
+            "example": {"name": "Don Quixote", "garden_id": "a47a4b121"}
+        }

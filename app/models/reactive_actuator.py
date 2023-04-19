@@ -34,6 +34,9 @@ class Reactive_Actuator(BaseModel):
 class RA_Update(BaseModel):
     name: Optional[str]
     sensor_id: Optional[str]
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {"example": {"name": "Don Quixote", "sensor_id": "a47a4b121"}}
+        schema_extra = {
+            "example": {"name": "Don Quixote", "sensor_id": "a47a4b121"}
+        }

@@ -4,11 +4,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from app.routes.scheduled_actuator import router as sa_router
 
 load_dotenv()
-
-
-from app.routes.scheduled_actuator import router as sa_router
 
 app = FastAPI()
 app.include_router(sa_router, tags=["scheduled_actuators"], prefix="/sa")

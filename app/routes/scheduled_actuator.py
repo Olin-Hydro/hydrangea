@@ -32,7 +32,9 @@ def create_scheduled_actuator(
     response_model=List[Scheduled_Actuator],
 )
 def list_scheduled_actuators(request: Request, limit: int = 1000):
-    scheduled_actuators = list(request.app.database["scheduled_actuators"].find())
+    scheduled_actuators = list(
+        request.app.database["scheduled_actuators"].find()
+    )
     scheduled_actuators.sort(key=lambda r: r["updated_at"], reverse=True)
 
     return scheduled_actuators[:limit]
@@ -56,7 +58,9 @@ def find_scheduled_actuator(id: str, request: Request):
 
 
 @router.put("/{id}", response_description="Update a scheduled actuator")
-def update_scheduled_actuator(id: str, request: Request, sa: SA_Update = Body(...)):
+def update_scheduled_actuator(
+    id: str, request: Request, sa: SA_Update = Body(...)
+):
     sa = {k: v for k, v in sa.dict().items() if v is not None}
 
     if len(sa) >= 1:

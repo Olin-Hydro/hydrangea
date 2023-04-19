@@ -33,6 +33,7 @@ class Sensor(BaseModel):
 class SensorUpdate(BaseModel):
     name: Optional[str]
     garden_id: Optional[str]
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
         schema_extra = {

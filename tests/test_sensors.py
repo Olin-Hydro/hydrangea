@@ -3,12 +3,11 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from app.routes.sensor import router as sensor_router
+from app.routes.garden import router as garden_router
 
 load_dotenv()
 
-
-from app.routes.sensor import router as sensor_router
-from app.routes.garden import router as garden_router
 
 app = FastAPI()
 app.include_router(sensor_router, tags=["sensor"], prefix="/sensor")
@@ -62,7 +61,8 @@ def test_create_sensor():
 def test_create_sensor_missing_name():
     with TestClient(app) as client:
         response = client.post(
-            "/sensor/", json={"garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"}
+            "/sensor/",
+            json={"garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e"},
         )
         assert response.status_code == 422
 
@@ -140,7 +140,9 @@ def test_delete_sensor():
             },
         ).json()
 
-        delete_sensor_response = client.delete("/sensor/" + new_sensor.get("_id"))
+        delete_sensor_response = client.delete(
+            "/sensor/" + new_sensor.get("_id")
+        )
         assert delete_sensor_response.status_code == 204
 
 

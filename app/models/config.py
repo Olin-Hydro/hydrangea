@@ -22,7 +22,7 @@ class RASchedule(BaseModel):
     interval: float = Field(...)
     threshold: float = Field(...)
     duration: float = Field(...)
-    threshold_type: int = Field(...)
+    threshold_type: int = Field(...)  # 1: ceiling, 0: floor
 
 
 class Config(BaseModel):
@@ -86,6 +86,7 @@ class ConfigUpdate(BaseModel):
     sensor_schedule: Optional[List[SensorSchedule]]
     ra_schedule: Optional[List[RASchedule]]
     sa_schedule: Optional[List[SASchedule]]
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
         schema_extra = {

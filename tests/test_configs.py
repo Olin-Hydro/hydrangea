@@ -4,11 +4,10 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from app.routes.config import router as config_router
 
 load_dotenv()
 
-
-from app.routes.config import router as config_router
 
 app = FastAPI()
 app.include_router(config_router, tags=["configs"], prefix="/config")
@@ -66,7 +65,9 @@ def test_create_config():
 
         body = response.json()
         assert body.get("name") == "Config"
-        assert body.get("sensor_schedule") == [{"sensor_id": "abc", "interval": 300}]
+        assert body.get("sensor_schedule") == [
+            {"sensor_id": "abc", "interval": 300}
+        ]
         # TODO: fill in checks here
         assert "_id" in body
 

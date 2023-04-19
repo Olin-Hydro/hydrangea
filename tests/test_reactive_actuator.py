@@ -1,14 +1,12 @@
 import os
-import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from app.routes.reactive_actuator import router as ra_router
 
 load_dotenv()
-
-from app.routes.reactive_actuator import router as ra_router
 
 app = FastAPI()
 app.include_router(ra_router, tags=["reactive_actuator"], prefix="/ra")
