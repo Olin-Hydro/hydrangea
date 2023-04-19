@@ -17,7 +17,7 @@ ISO8601_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
     status_code=status.HTTP_201_CREATED,
     response_model=Reading,
 )
-def create_reactive_actuator(request: Request, reading: Reading = Body(...)):
+def create_sensor_reading(request: Request, reading: Reading = Body(...)):
     reading = jsonable_encoder(reading)
     sensor_id = reading.get("sensor_id")
     if (
