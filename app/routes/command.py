@@ -28,8 +28,8 @@ def create_command(request: Request, commands: List[Command] = Body(...)):
 
 
 @router.get("/", response_description="List commands", response_model=List[Command])
-def list_commands(request: Request, limit: int = 1000):
-    commands = list(request.app.database["commands"].find())
+def list_commands(request: Request, limit: int = 1000, executed="false"):
+    commands = list(request.app.database["commands"].find({"executed": executed}))
     commands.sort(key=lambda r: r["updated_at"], reverse=True)
     return commands[:limit]
 

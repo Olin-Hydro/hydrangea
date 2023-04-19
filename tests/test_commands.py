@@ -76,6 +76,26 @@ def test_get_cmd():
         assert get_cmd_response.json() == new_cmd
 
 
+def test_get_cmds_executed():
+    with TestClient(app) as client:
+        new_cmd = client.post(
+            "/cmd/",
+            json=[
+                {
+                    "ref_id": "hsdjfsk",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                    "executed": "true",
+                }
+            ],
+        ).json()[0]
+        get_cmd_response = client.get("/cmd/")
+        assert get_cmd_response.status_code == 200
+        # Should be empty because executed is true
+        assert get_cmd_response.json() == []
+
+
 def test_get_cmd_unexisting():
     with TestClient(app) as client:
         get_cmd_response = client.get("/cmd/unexisting_id")
