@@ -77,6 +77,7 @@ def test_get_cmd():
 
 def test_get_cmds_executed():
     with TestClient(app) as client:
+
         client.post(
             "/cmd/",
             json=[
@@ -114,10 +115,8 @@ def test_update_cmd():
                 }
             ],
         ).json()[0]
+        response = client.put("/cmd/" + new_cmd.get("_id"), json={"executed": "true"})
 
-        response = client.put(
-            "/cmd/" + new_cmd.get("_id"), json={"executed": "true"}
-        )
         assert response.status_code == 200
         assert response.json().get("executed") == "true"
 
