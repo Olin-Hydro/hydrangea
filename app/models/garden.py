@@ -12,7 +12,6 @@ class Garden(BaseModel):
     name: str = Field(...)
     location: str = Field(...)
     config_id: Optional[str] = None
-    # pods: Optional[List[Pod]] = None
     pods: Optional[List[Pod]] = None
     created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
