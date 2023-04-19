@@ -46,6 +46,7 @@ def test_create_command():
 
         body = response.json()[0]
         assert body.get("cmd") == 1
+        assert body.get("executed") == "false"
         assert body.get("type") == "reactive actuator"
         assert body.get("garden_id") == "abc"
         assert "_id" in body
@@ -79,3 +80,30 @@ def test_get_cmd_unexisting():
     with TestClient(app) as client:
         get_cmd_response = client.get("/cmd/unexisting_id")
         assert get_cmd_response.status_code == 404
+
+
+def test_update_cmd():
+    with TestClient(app) as client:
+        new_cmd = client.post(
+            "/cmd/",
+            json=[
+                {
+                    "ref_id": "hsdjfsk",
+                    "cmd": 1,
+                    "type": "reactive actuator",
+                    "garden_id": "abc",
+                }
+            ],
+        ).json()[0]
+
+        response = client.put("/cmd/" + new_cmd.get("_id"), json={"executed": "true"})
+        assert response.status_code == 200
+        assert response.json().get("executed") == "true"
+
+
+def test_update_cmd_unexisting():
+    with TestClient(app) as client:
+        update_cmd_response = client.put(
+            "/cmd/unexisting_id", json={"executed": "true"}
+        )
+        assert update_cmd_response.status_code == 404

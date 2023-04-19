@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, Field, root_validator
 import pytz
@@ -10,6 +11,7 @@ class Command(BaseModel):
     ref_id: str = Field(...)
     cmd: int = Field(...)
     type: str = Field(...)
+    executed: str = Field(default="false")
     garden_id: str = Field(...)
     created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
@@ -22,6 +24,7 @@ class Command(BaseModel):
                 "ref_id": "36708a32-a24c-4b70-ae2c-c46c586ea0c3",
                 "cmd": 1,
                 "type": "reactive actuator",
+                "executed": "false",
                 "garden_id": "87808a32-a24c-4b70-ae2c-c46c586ea0c3",
                 "created_at": "2023-02-17T20:19:00.536083",
                 "updated_at": "2023-02-17T20:19:00.536084",
@@ -32,3 +35,11 @@ class Command(BaseModel):
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
+
+
+class CommandUpdate(BaseModel):
+    executed: str
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
+
+    class Config:
+        schema_extra = {"example": {"executed": "true"}}
