@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: rickstaa/action-black@v1
+      - uses: jpetrucciani/black-check@master
         with:
           black_args: "app/ tests/ --check --line-length 79 -v"
