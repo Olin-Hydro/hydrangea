@@ -77,7 +77,6 @@ def test_get_cmd():
 
 def test_get_cmds_executed():
     with TestClient(app) as client:
-
         client.post(
             "/cmd/",
             json=[
