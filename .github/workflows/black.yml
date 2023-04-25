@@ -1,11 +1,15 @@
 name: black-action
-on: [pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   linter_name:
     name: runner / black formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: rickstaa/action-black@v1
+      - uses: jpetrucciani/black-check@master
         with:
-          black_args: ". --check --line-length 79"
+          black_args: "app/ tests/ --check --line-length 79 -v"
