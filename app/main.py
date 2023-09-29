@@ -1,40 +1,65 @@
 # Importing libraries
 
-import os
+import os  # Import the 'os' library for working with environment variables.
+from fastapi import FastAPI, Request  # Import necessary FastAPI components.
+from fastapi.openapi.docs import get_swagger_ui_html  # Import Swagger UI HTML generator.
+from pymongo import MongoClient  # Import the MongoDB client.
+from app.routes.garden import router as garden_router  # Import router for garden-related routes.
+from app.routes.sensor import router as sensor_router  # Import router for sensor-related routes.
+from app.routes.scheduled_actuator import router as scheduled_actuator_router  # Import router for scheduled actuator routes.
+from app.routes.reactive_actuator import router as reactive_actuator_router  # Import router for reactive actuator routes.
+from app.routes.command import router as command_router  # Import router for command-related routes.
+from app.routes.config import router as config_router  # Import router for config-related routes.
+from app.routes.logging import router as logging_router  # Import router for logging-related routes.
+from dotenv import load_dotenv  # Import the 'load_dotenv' function to load environment variables from a file.
+from mangum import Mangum  # Import Mangum for AWS Lambda deployment.
 
-from fastapi import FastAPI, Request
-from fastapi.openapi.docs import get_swagger_ui_html
-from pymongo import MongoClient
-from app.routes.garden import router as garden_router
-from app.routes.sensor import router as sensor_router
-from app.routes.scheduled_actuator import router as scheduled_actuator_router
-from app.routes.reactive_actuator import router as reactive_actuator_router
-from app.routes.command import router as command_router
-from app.routes.config import router as config_router
-from app.routes.logging import router as logging_router
-from dotenv import load_dotenv
-from mangum import Mangum
 
-
+# Loads environment variables from a '.env' file. 
 load_dotenv()
 
+"""
+TIP:
+A `.env` file is a plain text file used to store configuration settings and environment variables 
+for a software application, facilitating separation of sensitive data from the source code, and allowing 
+dynamic configuration at runtime.
+
+To create a `.env` file:
+
+On Unix-like systems (Linux, macOS):
+1. Open a terminal.
+2. Use the following command to create the `.env` file:
+    >> touch .env
+
+On Windows:
+1. Open a text editor like Notepad.
+2. Create a new text document.
+3. Save the document with the name `.env` (including the leading dot) in the directory where your project is located.
+
+The `.env` file is a crucial part of many projects, as it enables you to manage configuration settings and sensitive data separately 
+from your codebase. It also facilitates the use of virtual environments and simplifies the installation of dependencies, keeping your 
+development environment clean and organized.
+"""
+
+# Gets the MongoDB Atlas URI and database name from environment variables.
 ATLAS_URI = os.environ["ATLAS_URI"]
 DB_NAME = os.environ["DB_NAME"]
 
+# Creates a FastAPI app instance.
 app = FastAPI()
 
-
+# Defines a startup event to initialize the MongoDB client and database.
 @app.on_event("startup")
 def startup_db_client():
     app.mongodb_client = MongoClient(ATLAS_URI)
     app.database = app.mongodb_client[DB_NAME]
 
-
+# Define a shutdown event to close the MongoDB client connection when the app is shutdown.
 @app.on_event("shutdown")
 def shutdown_db_client():
     app.mongodb_client.close()
 
-
+# Create a custom endpoint for Swagger UI documentation.
 @app.get("/docs", include_in_schema=False)
 def custom_swagger_ui_html(req: Request):
     root_path = req.scope.get("root_path", "").rstrip("/")
@@ -44,7 +69,7 @@ def custom_swagger_ui_html(req: Request):
         title="API",
     )
 
-
+# Include routers for various API routes.
 app.include_router(garden_router, tags=["gardens"], prefix="/garden")
 app.include_router(sensor_router, tags=["sensors"], prefix="/sensor")
 app.include_router(
@@ -57,5 +82,5 @@ app.include_router(command_router, tags=["commands"], prefix="/cmd")
 app.include_router(logging_router, tags=["logging"])
 app.include_router(config_router, tags=["configs"], prefix="/config")
 
-
+# Create a Mangum handler for AWS Lambda deployment.
 handler = Mangum(app)
