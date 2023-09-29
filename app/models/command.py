@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 import pytz
 
 
@@ -16,8 +16,8 @@ class Command(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "_id": "66608a32-a24c-4b70-ae2c-c46c586ea0c3",
                 "ref_id": "36708a32-a24c-4b70-ae2c-c46c586ea0c3",
@@ -30,7 +30,7 @@ class Command(BaseModel):
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -41,4 +41,4 @@ class CommandUpdate(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {"example": {"executed": "true"}}
+        json_schema_extra = {"example": {"executed": "true"}}

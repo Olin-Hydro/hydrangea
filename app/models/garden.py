@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional, Union, List
 import pytz
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 from app.models.pod import Pod, PodUpdate
 
 
@@ -17,8 +17,8 @@ class Garden(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "_id": "66608a32-a24c-4b70-ae2c-c46c586ea0c3",
                 "name": "Og Garden",
@@ -40,7 +40,7 @@ class Garden(BaseModel):
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -54,7 +54,7 @@ class GardenUpdate(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "name": "Don Quixote",
                 "location": "Miguel de Cervantes",

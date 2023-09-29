@@ -3,7 +3,7 @@ import pytz
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class Scheduled_Actuator(BaseModel):
@@ -14,8 +14,8 @@ class Scheduled_Actuator(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "_id": "15a2a241-cf21-4365-af45-3d140712f2b8",
                 "name": "water pump",
@@ -25,7 +25,7 @@ class Scheduled_Actuator(BaseModel):
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -37,6 +37,6 @@ class SA_Update(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {"name": "Don Quixote", "garden_id": "a47a4b121"}
         }

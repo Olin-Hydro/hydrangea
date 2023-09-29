@@ -1,7 +1,7 @@
 import uuid
 import pytz
 from datetime import datetime
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class Reading(BaseModel):
@@ -12,15 +12,15 @@ class Reading(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "sensor_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "value": "5",
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -34,15 +34,15 @@ class Scheduled_Action(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "actuator_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "data": "5",
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -56,15 +56,15 @@ class Reactive_Action(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "actuator_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "data": "on",
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values

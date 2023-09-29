@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional, List
 import pytz
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class SASchedule(BaseModel):
@@ -35,8 +35,8 @@ class Config(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "_id": "b67cd1cf-e113-40cf-a293-ba80251e03ce",
                 "name": "TestConfig",
@@ -75,7 +75,7 @@ class Config(BaseModel):
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -89,7 +89,7 @@ class ConfigUpdate(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "name": "Config 1",
                 "sensor_schedule": [{"sensor_id": "abc", "interval": 400}],
