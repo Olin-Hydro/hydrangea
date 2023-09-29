@@ -13,5 +13,3 @@ beanie
 asgi-lifespan==2.1.0
 mangum==0.17.0
 pytz==2023.3.post1
-# To mock database
-pytest-docker[docker-compose-v1]==2.0.1
