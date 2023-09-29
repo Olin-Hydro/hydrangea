@@ -1,6 +1,7 @@
 # Importing libraries
 
 import os  # Import the 'os' library for working with environment variables.
+
 from fastapi import FastAPI, Request  # Import necessary FastAPI components.
 from fastapi.openapi.docs import get_swagger_ui_html  # Import Swagger UI HTML generator.
 from pymongo import MongoClient  # Import the MongoDB client.
