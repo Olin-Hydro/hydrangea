@@ -1,7 +1,8 @@
 """
     The code defines Pydantic data models for managing schedules and configurations related to sensors, 
-    Smart Actuators (SA), and Reactive Actuators (RA). It includes fields for unique identifiers, scheduling 
-    parameters, and timestamps, offering structured data validation and documentation support.
+    Smart Actuators (SA), and Reactive Actuators (RA). These models allow structured data validation and 
+    include fields for unique identifiers, scheduling parameters, and timestamps, facilitating documentation 
+    and management of sensor and actuator-related data.
 """
 import uuid  # Import the 'uuid' module for generating unique identifiers.
 from datetime import datetime  # Import 'datetime' for working with timestamps.
