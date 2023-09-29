@@ -1,41 +1,48 @@
-import uuid
-from datetime import datetime
-from typing import Optional, List
-import pytz
+"""
+    The code defines Pydantic data models for managing schedules and configurations related to sensors, 
+    Smart Actuators (SA), and Reactive Actuators (RA). It includes fields for unique identifiers, scheduling 
+    parameters, and timestamps, offering structured data validation and documentation support.
+"""
+import uuid  # Import the 'uuid' module for generating unique identifiers.
+from datetime import datetime  # Import 'datetime' for working with timestamps.
+from typing import Optional, List  # Import 'Optional' and 'List' for type hints.
+import pytz  # Import 'pytz' for timezone support.
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, root_validator  # Import Pydantic components.
 
-
+# Define a Pydantic data model 'SASchedule' for scheduling Smart Actuators (SA).
 class SASchedule(BaseModel):
-    sa_id: str = Field(...)
-    on: List[datetime] = Field(...)
-    off: List[datetime] = Field(...)
+    sa_id: str = Field(...)  # Identifier for the Smart Actuator.
+    on: List[datetime] = Field(...)  # List of scheduled activation times.
+    off: List[datetime] = Field(...)  # List of scheduled deactivation times.
 
-
+# Define a Pydantic data model 'SensorSchedule' for scheduling sensors.
 class SensorSchedule(BaseModel):
-    sensor_id: str = Field(...)
-    interval: float = Field(...)
+    sensor_id: str = Field(...)  # Identifier for the sensor.
+    interval: float = Field(...)  # Measurement interval for the sensor.
 
-
+# Define a Pydantic data model 'RASchedule' for scheduling Reactive Actuators (RA).
 class RASchedule(BaseModel):
-    ra_id: str = Field(...)
-    interval: float = Field(...)
-    threshold: float = Field(...)
-    duration: float = Field(...)
-    threshold_type: int = Field(...)  # 1: ceiling, 0: floor
+    ra_id: str = Field(...)  # Identifier for the Reactive Actuator.
+    interval: float = Field(...)  # Interval for performing reactive actions.
+    threshold: float = Field(...)  # Threshold value for activation.
+    duration: float = Field(...)  # Duration of the reactive action.
+    threshold_type: int = Field(...)  # Type of threshold (1: ceiling, 0: floor).
 
-
+# Define a Pydantic data model 'Config' for representing configuration settings.
 class Config(BaseModel):
-    id: str = Field(default_factory=uuid.uuid4, alias="_id")
-    name: str = Field(...)
-    sensor_schedule: List[SensorSchedule] = Field(...)
-    ra_schedule: List[RASchedule] = Field(...)
-    sa_schedule: List[SASchedule] = Field(...)
-    created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
-    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
+    id: str = Field(default_factory=uuid.uuid4, alias="_id")  # Unique identifier for the configuration.
+    name: str = Field(...)  # Name of the configuration.
+    sensor_schedule: List[SensorSchedule] = Field(...)  # List of sensor schedules.
+    ra_schedule: List[RASchedule] = Field(...)  # List of Reactive Actuator schedules.
+    sa_schedule: List[SASchedule] = Field(...)  # List of Smart Actuator schedules.
+    created_at: datetime = datetime.now(pytz.timezone("US/Eastern"))  # Timestamp for configuration creation.
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))  # Timestamp for configuration updates.
 
     class Config:
-        allow_population_by_field_name = True
+        allow_population_by_field_name = True  # Allow populating model fields using dictionary keys.
+
+        # Example data structure for documentation.
         schema_extra = {
             "example": {
                 "_id": "b67cd1cf-e113-40cf-a293-ba80251e03ce",
@@ -77,18 +84,20 @@ class Config(BaseModel):
 
         @root_validator
         def number_validator(cls, values):
+            # Ensure 'updated_at' field is updated when any values change.
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
 
-
+# Define a Pydantic data model 'ConfigUpdate' for updating configuration settings.
 class ConfigUpdate(BaseModel):
-    name: Optional[str]
-    sensor_schedule: Optional[List[SensorSchedule]]
-    ra_schedule: Optional[List[RASchedule]]
-    sa_schedule: Optional[List[SASchedule]]
-    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
+    name: Optional[str]  # Updated name for the configuration.
+    sensor_schedule: Optional[List[SensorSchedule]]  # Updated sensor schedules.
+    ra_schedule: Optional[List[RASchedule]]  # Updated Reactive Actuator schedules.
+    sa_schedule: Optional[List[SASchedule]]  # Updated Smart Actuator schedules.
+    updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))  # Timestamp for update.
 
     class Config:
+        # Example data structure for documentation.
         schema_extra = {
             "example": {
                 "name": "Config 1",

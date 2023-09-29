@@ -1,8 +1,8 @@
 """
-The code defines two Pydantic data models, 'Command' and 'CommandUpdate,' for representing and 
-managing commands and their updates, including fields for identifiers, timestamps, and execution status. 
-It ensures data validation and maintains up-to-date timestamps for command updates using Pydantic's 
-configuration and validation capabilities. 
+    The code defines two Pydantic data models, 'Command' and 'CommandUpdate,' for representing and 
+    managing commands and their updates, including fields for identifiers, timestamps, and execution status. 
+    It ensures data validation and maintains up-to-date timestamps for command updates using Pydantic's 
+    configuration and validation capabilities. 
 """
 
 import uuid  # Import the 'uuid' module to generate unique identifiers.
