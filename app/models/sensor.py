@@ -2,7 +2,7 @@ import uuid
 import pytz
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class Sensor(BaseModel):
@@ -13,8 +13,8 @@ class Sensor(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        allow_population_by_field_name = True
-        schema_extra = {
+        populate_by_name = True
+        json_schema_extra = {
             "example": {
                 "_id": "5ff70c48-7a56-47fe-b7d9-8df3be3e3197",
                 "name": "pH",
@@ -24,7 +24,7 @@ class Sensor(BaseModel):
             }
         }
 
-        @root_validator
+        @field_validator("updated_at")
         def number_validator(cls, values):
             values["updated_at"] = datetime.now(pytz.timezone("US/Eastern"))
             return values
@@ -36,7 +36,7 @@ class SensorUpdate(BaseModel):
     updated_at: datetime = datetime.now(pytz.timezone("US/Eastern"))
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "name": "pH",
                 "garden_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
