@@ -6,10 +6,12 @@ pymongo==4.5.0
 python-dotenv==0.21.1
 flake8==6.1.0
 black==23.9.1
-pre-commit==3.4.0
+# pre-commit==3.4.0 This causes pyyaml to install, which returns an error.
 requests==2.31.0
 pytest==7.4.2
 beanie
 asgi-lifespan==2.1.0
 mangum==0.17.0
 pytz==2023.3.post1
+# To mock database
+pytest-docker[docker-compose-v1]==2.0.1
