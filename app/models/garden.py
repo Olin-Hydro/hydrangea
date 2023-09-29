@@ -4,6 +4,7 @@
     and pods. These models enable structured data validation and offer example data structures 
     for documentation, contributing to the efficient management of garden-related data.
 """
+
 import uuid  # Import the 'uuid' module for generating unique identifiers.
 from datetime import datetime  # Import 'datetime' for working with timestamps.
 from typing import Optional, Union, List  # Import 'Optional', 'Union', and 'List' for type hints.

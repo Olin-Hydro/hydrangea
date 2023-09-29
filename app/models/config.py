@@ -4,6 +4,7 @@
     include fields for unique identifiers, scheduling parameters, and timestamps, facilitating documentation 
     and management of sensor and actuator-related data.
 """
+
 import uuid  # Import the 'uuid' module for generating unique identifiers.
 from datetime import datetime  # Import 'datetime' for working with timestamps.
 from typing import Optional, List  # Import 'Optional' and 'List' for type hints.
