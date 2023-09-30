@@ -1,13 +1,17 @@
-from typing import List
+"""
+    This FastAPI code defines a set of API routes for managing commands in a database, 
+    including creation, listing, retrieval by ID, and updates. It utilizes data models 
+    and responds with appropriate status codes, enabling the interaction with command 
+    data in a web application.
+"""
 
+from typing import List  # Import 'List' for type hinting.
 from fastapi import APIRouter, Body, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 
-from app.models.command import Command, CommandUpdate
+from app.models.command import Command, CommandUpdate  # Import data models.
 
-
-router = APIRouter()
-
+router = APIRouter()  # Create an instance of APIRouter to define route handlers.
 
 @router.post(
     "/",
@@ -16,6 +20,16 @@ router = APIRouter()
     response_model=List[Command],
 )
 def create_command(request: Request, commands: List[Command] = Body(...)):
+    """
+    Create multiple commands in the database.
+
+    Args:
+        request (Request): The FastAPI request object.
+        commands (List[Command]): List of commands to create.
+
+    Returns:
+        List[Command]: List of created commands.
+    """
     created_cmds = []
     for command in commands:
         cmd = jsonable_encoder(command)
@@ -26,17 +40,26 @@ def create_command(request: Request, commands: List[Command] = Body(...)):
         created_cmds.append(created_cmd)
     return created_cmds
 
-
 @router.get(
     "/", response_description="List commands", response_model=List[Command]
 )
 def list_commands(request: Request, limit: int = 1000, executed="false"):
+    """
+    List commands from the database.
+
+    Args:
+        request (Request): The FastAPI request object.
+        limit (int): Maximum number of commands to retrieve.
+        executed (str): Filter commands by execution status ("true" or "false").
+
+    Returns:
+        List[Command]: List of commands that match the filter criteria.
+    """
     commands = list(
         request.app.database["commands"].find({"executed": executed})
     )
     commands.sort(key=lambda r: r["updated_at"], reverse=True)
     return commands[:limit]
-
 
 @router.get(
     "/{id}",
@@ -44,6 +67,19 @@ def list_commands(request: Request, limit: int = 1000, executed="false"):
     response_model=Command,
 )
 def find_command(id: str, request: Request):
+    """
+    Retrieve a single command by its ID from the database.
+
+    Args:
+        id (str): The ID of the command to retrieve.
+        request (Request): The FastAPI request object.
+
+    Returns:
+        Command: The retrieved command.
+
+    Raises:
+        HTTPException: If the command with the specified ID is not found.
+    """
     if (
         command := request.app.database["commands"].find_one({"_id": id})
     ) is not None:
@@ -54,11 +90,24 @@ def find_command(id: str, request: Request):
         detail=f"Command with ID {id} not found",
     )
 
-
 @router.put(
     "/{id}", response_description="Update a command", response_model=Command
 )
 def update_command(id: str, request: Request, cmd: CommandUpdate = Body(...)):
+    """
+    Update a command in the database.
+
+    Args:
+        id (str): The ID of the command to update.
+        request (Request): The FastAPI request object.
+        cmd (CommandUpdate): The updated command data.
+
+    Returns:
+        Command: The updated command.
+
+    Raises:
+        HTTPException: If the command with the specified ID is not found.
+    """
     cmd = {k: v for k, v in cmd.dict().items() if v is not None}
 
     if len(cmd) >= 2:
