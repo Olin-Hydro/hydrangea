@@ -12,6 +12,7 @@ from app.routes.config import router as config_router
 from app.routes.logging import router as logging_router
 from dotenv import load_dotenv
 from mangum import Mangum
+from fastapi.middleware.cors import CORSMiddleware
 
 
 load_dotenv()
@@ -20,6 +21,16 @@ ATLAS_URI = os.environ["ATLAS_URI"]
 DB_NAME = os.environ["DB_NAME"]
 
 app = FastAPI()
+
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 
 @app.on_event("startup")
