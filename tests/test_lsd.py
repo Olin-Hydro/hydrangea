@@ -125,3 +125,31 @@ def test_create_garden_optional_pods():
         assert body.get("name") == "Don Quixote"
         assert body.get("location") == "Miguel de Cervantes"
         assert "_id" in body
+
+def def_test_fetch_most_recent_log():
+    with TestClient(app) as client:
+        new_garden = client.post(
+            "/garden/",
+            json={
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+                "config_id": "abc",
+            },
+        ).json()
+        new_sensor = client.post(
+            "/sensor/",
+            json={
+                "name": "Humidity",
+                "garden_id": new_garden.get("_id"),
+            },
+        ).json()
+        response = client.post(
+            "/sensors/logging/",
+            json={"sensor_id": new_sensor.get("_id"), "value": "5"},
+        )
+        assert response.status_code == 201
+        body = response.json()
+        assert body.get("sensor_id") == new_sensor.get("_id")
+        assert body.get("value") == 5
+        assert "_id" in body
+        assert "created_at" in body
