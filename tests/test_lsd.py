@@ -173,7 +173,7 @@ def test_create_garden_optional_pods():
         assert "_id" in body
 
 
-def def_test_fetch_most_recent_log():
+def test_fetch_most_recent_log():
     with TestClient(app) as client:
         new_garden = client.post(
             "/garden/",
@@ -190,8 +190,53 @@ def def_test_fetch_most_recent_log():
                 "garden_id": new_garden.get("_id"),
             },
         ).json()
-        response = client.post(
+        _ = client.post(
             "/sensors/logging/",
             json={"sensor_id": new_sensor.get("_id"), "value": "5"},
         )
 
+
+def test_create_sensor_log(create_sensor, delete_gardens, delete_sensors):
+    """
+    When a sensor log is created, the response should contain the sensor log.
+    """
+    with TestClient(app) as client:
+        response = client.post(
+            "/sensors/logging/",
+            json={
+                "sensor_id": create_sensor.json().get("_id"),
+                "value": "10",
+            },
+        )
+        assert response.status_code == 201
+
+        body = response.json()
+        assert body.get("sensor_id") == create_sensor.json().get("_id")
+        assert body.get("value") == "10"
+        assert "_id" in body
+    delete_gardens
+    delete_sensors
+
+
+def future_tests():
+    """
+    When creating the sensor object, a name and garden_id are required. This
+    function checks that if a name is not given in the request body, then
+    the return status is 422 unprocessable content to signify an error has
+    occurred.
+    """
+
+    """
+    When creating the sensor object, a name and garden_id are required. This
+    function checks that if a garden_id is not given in the request body, then
+    the return status is 422 unprocessable content to signify an error has
+    occurred.
+    """
+
+    """
+    When creating the sensor object, a name and garden_id are required. This
+    function checks that if an incorrect garden_id is given in the request
+    body, then the return status is 422 unprocessable content to signify an
+    error has occurred.
+    """
+    pass
