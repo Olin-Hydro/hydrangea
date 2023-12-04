@@ -12,6 +12,9 @@ from app.routes.reactive_actuator import router as ra_router
 from app.routes.scheduled_actuator import router as sa_router
 from app.routes.logging import router as logging_router
 
+# For creating a Pod fixture for testing
+from app.models.pod
+
 load_dotenv()
 
 app = FastAPI()
@@ -56,6 +59,12 @@ def test_create_garden_no_location_argument():
         assert response.status_code == 422
 
 def test_create_garden_no_name_argument():
+    """
+    When creating the garden object, a name and location are required. This
+    function checks that if a name is not given in the request body, then
+    the return status is 422 unprocessable content to signify an error has
+    occurred.
+    """
     with TestClient(app) as client:
         response = client.post(
             "/garden/",
@@ -66,8 +75,13 @@ def test_create_garden_no_name_argument():
         )
         assert response.status_code == 422
 
-def test_create_garden_optional_param_handling():
-    # 
+def test_create_garden_optional_config_id():
+    """
+    When creating the garden object, a name and location are required. There
+    are also optional arguments such as config_id and pods. This test checks if
+    a config_id has been included in the request body, the response will
+    contain a parameter "config_id" with value specified by the request.
+    """
     with TestClient(app) as client:
         response = client.post(
             "/garden/",
@@ -83,4 +97,28 @@ def test_create_garden_optional_param_handling():
         assert body.get("name") == "Don Quixote"
         assert body.get("location") == "Miguel de Cervantes"
         assert body.get("config_id") == "123"
+        assert "_id" in body
+
+def test_create_garden_optional_pods():
+    """
+    When creating the garden object, a name and location are required. There
+    are also optional arguments such as config_id and pods. This test checks if
+    a pods argument has been included in the request body, the response will
+    contain a list "pods" with values specified by the request.
+    """
+    with TestClient(app) as client:
+        response = client.post(
+            "/garden/",
+            json={
+                "name": "Don Quixote",
+                "location": "Miguel de Cervantes",
+                "pods": [Pod()],
+            },
+        )
+        assert response.status_code == 201
+
+        body = response.json()
+        assert body.get("name") == "Don Quixote"
+        assert body.get("location") == "Miguel de Cervantes"
+        assert body.get("config_id") == [Pod()]
         assert "_id" in body
