@@ -214,8 +214,8 @@ def test_create_sensor_log(create_sensor, delete_gardens, delete_sensors):
         assert body.get("sensor_id") == create_sensor.json().get("_id")
         assert body.get("value") == "10"
         assert "_id" in body
-    delete_gardens
-    delete_sensors
+    delete_gardens()
+    delete_sensors()
 
 
 def future_tests():
