@@ -62,12 +62,12 @@ def create_sensor(client, create_garden):
 
 
 @pytest.fixture
-def delete_gardens(client):
+def delete_gardens():
     app.database.drop_collection("gardens")
 
 
 @pytest.fixture
-def delete_sensors(client):
+def delete_sensors():
     app.database.drop_collection("sensors")
 
 
