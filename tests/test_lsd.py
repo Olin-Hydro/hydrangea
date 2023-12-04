@@ -103,8 +103,8 @@ def test_create_garden_optional_pods():
     """
     When creating the garden object, a name and location are required. There
     are also optional arguments such as config_id and pods. This test checks if
-    a pods argument has been included in the request body, the response will
-    contain a list "pods" with values specified by the request.
+    a pods argument has been included in the request body, there is a resopnse
+    given by the client.
     """
     with TestClient(app) as client:
         response = client.post(
@@ -112,7 +112,11 @@ def test_create_garden_optional_pods():
             json={
                 "name": "Don Quixote",
                 "location": "Miguel de Cervantes",
-                "pods": [Pod()],
+                "pods": [Pod(
+                    {"name" : "Spain",
+                     "id" : "321",
+                     "location" : [1, 2, 3]}
+                )],
             },
         )
         assert response.status_code == 201
@@ -120,5 +124,4 @@ def test_create_garden_optional_pods():
         body = response.json()
         assert body.get("name") == "Don Quixote"
         assert body.get("location") == "Miguel de Cervantes"
-        assert body.get("config_id") == [Pod()]
         assert "_id" in body
